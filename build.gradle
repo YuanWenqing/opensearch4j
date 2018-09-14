@@ -1,0 +1,93 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            name "nexus"
+            url "https://nexus.ilovelook.cn/repository/maven-public/"
+            credentials {
+                username property("nexus.username")
+                password property("nexus.password")
+            }
+        }
+    }
+}
+
+ext {
+    springBootVersion = '2.0.3.RELEASE'
+    springVersion = '5.0.7.RELEASE'
+}
+
+// project setting
+subprojects {
+    group = "top.fangwz.aliyun"
+    version = "0.1.0"
+
+    repositories {
+        mavenLocal()
+        maven {
+            name "nexus"
+            url "https://nexus.ilovelook.cn/repository/maven-public/"
+            credentials {
+                username property("nexus.username")
+                password property("nexus.password")
+            }
+        }
+    }
+
+    apply plugin: "java"
+    apply plugin: "java-library"
+    apply plugin: "jacoco"
+
+    jar << {
+        // println jar.archivePath
+    }
+    task('sourcesJar', type: Jar, dependsOn: classes) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+    task('javadocJar', type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    jacocoTestReport.dependsOn(test)
+    jacocoTestReport << {
+        println jacocoTestReport.reports.html.entryPoint
+    }
+
+    test << {
+        println test.reports.html.entryPoint
+    }
+
+    apply plugin: "maven-publish"
+    afterEvaluate {
+        publishing.publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifactId project.archivesBaseName
+                version project.version
+
+                artifact sourcesJar
+            }
+        }
+        publishToMavenLocal {
+            doLast {
+                def pub = publishing.publications.mavenJava
+                println "artifact: ${pub.groupId}:${pub.artifactId}:${pub.version}"
+            }
+        }
+        task local {
+            dependsOn publishToMavenLocal
+        }
+    }
+
+
+    dependencies {
+        //annotationProcessor("org.projectlombok:lombok:1.18.2")
+        compileOnly("org.projectlombok:lombok:1.18.2")
+
+        // test
+        testImplementation('junit:junit:4.12')
+    }
+}
+
