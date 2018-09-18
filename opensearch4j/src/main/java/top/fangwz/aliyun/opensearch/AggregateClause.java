@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author yuanwq
  */
-public class AggregateClause implements IClause {
+public class AggregateClause implements ISearchClause {
   private final Map<String, AggregateUnit> aggregates = Maps.newLinkedHashMap();
 
   public AggregateClause add(AggregateUnit aggregate) {
@@ -28,7 +28,7 @@ public class AggregateClause implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("aggregate=");
     if (isEmpty()) return sb;
     boolean first = true;
@@ -38,13 +38,13 @@ public class AggregateClause implements IClause {
       } else {
         sb.append(";");
       }
-      aggregate.toClause(sb);
+      aggregate.appendSearchParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 }

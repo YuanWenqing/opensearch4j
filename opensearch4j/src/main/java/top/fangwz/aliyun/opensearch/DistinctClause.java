@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author yuanwq
  */
-public class DistinctClause implements IClause {
+public class DistinctClause implements ISearchClause {
   private final Map<String, DistinctUnit> distincts = Maps.newLinkedHashMap();
 
   public DistinctClause add(DistinctUnit distinct) {
@@ -28,7 +28,7 @@ public class DistinctClause implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("distinct=");
     if (isEmpty()) return sb;
     boolean first = true;
@@ -38,13 +38,13 @@ public class DistinctClause implements IClause {
       } else {
         sb.append(";");
       }
-      distinct.toClause(sb);
+      distinct.appendSearchParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 }

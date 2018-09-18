@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * @author yuanwq
  */
-public class QueryUnit implements IClause, IQueryCond {
+public class QueryUnit implements ISearchClause, IQueryCond {
   private static final LookupTranslator SINGLE_QUOTATION_ESCAPER =
       new LookupTranslator(new String[][]{{"'", "\\'"}, {"\\", "\\\\"}});
   private static final LookupTranslator DOUBLE_QUOTATION_ESCAPER =
@@ -83,7 +83,7 @@ public class QueryUnit implements IClause, IQueryCond {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     if (indexField != null) {
       sb.append(indexField).append(":");
     }
@@ -103,7 +103,7 @@ public class QueryUnit implements IClause, IQueryCond {
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override

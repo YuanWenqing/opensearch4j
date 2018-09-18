@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * @author yuanwq
  */
-public class FilterCond extends LogicCond<IFilterCond, FilterCond> implements IClause, IFilterCond {
+public class FilterCond extends LogicCond<IFilterCond, FilterCond> implements ISearchClause, IFilterCond {
 
   public static FilterCond and() {
     return new FilterCond(LogicOp.AND);

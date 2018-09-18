@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author yuanwq
  */
-public class SearchReq<T> implements IClause {
+public class SearchReq<T> implements ISearchClause {
   private final String appName;
   private final Function<JsonNode, T> translator;
 
@@ -184,31 +184,31 @@ public class SearchReq<T> implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
-    query.toClause(sb);
+  public StringBuilder appendSearchParams(StringBuilder sb) {
+    query.appendSearchParams(sb);
     if (config != null) {
       sb.append("&&");
-      config.toClause(sb);
+      config.appendSearchParams(sb);
     }
     if (filter != null && !filter.isEmpty()) {
       sb.append("&&");
-      filter.toClause(sb);
+      filter.appendSearchParams(sb);
     }
     if (sort != null && !sort.isEmpty()) {
       sb.append("&&");
-      sort.toClause(sb);
+      sort.appendSearchParams(sb);
     }
     if (aggregate != null && !aggregate.isEmpty()) {
       sb.append("&&");
-      aggregate.toClause(sb);
+      aggregate.appendSearchParams(sb);
     }
     if (distinct != null && !distinct.isEmpty()) {
       sb.append("&&");
-      distinct.toClause(sb);
+      distinct.appendSearchParams(sb);
     }
     if (kvpairs != null && !kvpairs.isEmpty()) {
       sb.append("&&");
-      kvpairs.toClause(sb);
+      kvpairs.appendSearchParams(sb);
     }
     return sb;
   }
@@ -216,7 +216,7 @@ public class SearchReq<T> implements IClause {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(getClass()).add("app", appName)
-        .add("query", toClause(new StringBuilder()).toString()).add("fetch", fetchFields)
+        .add("query", appendSearchParams(new StringBuilder()).toString()).add("fetch", fetchFields)
         .add("formulaName", formulaName).add("firstFormulaName", firstFormulaName).add("qp", qps)
         .toString();
   }

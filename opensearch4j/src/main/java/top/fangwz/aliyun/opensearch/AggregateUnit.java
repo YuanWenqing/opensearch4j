@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author yuanwq
  */
-public class AggregateUnit implements IClause {
+public class AggregateUnit implements ISearchClause {
   private final String groupKey;
   private final List<String> aggFuns = Lists.newArrayList();
   private String range;
@@ -103,14 +103,14 @@ public class AggregateUnit implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("group_key:").append(groupKey).append(",agg_fun:").append(getAggFunText());
     if (StringUtils.isNotBlank(range)) {
       sb.append(",range:").append(range);
     }
     if (aggFilter != null) {
       sb.append(",agg_filter:");
-      aggFilter.toClause(sb);
+      aggFilter.appendSearchParams(sb);
     }
     if (aggSamplerThreshold > 0) {
       sb.append(",agg_sampler_threshold:").append(aggSamplerThreshold);
@@ -126,6 +126,6 @@ public class AggregateUnit implements IClause {
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 }

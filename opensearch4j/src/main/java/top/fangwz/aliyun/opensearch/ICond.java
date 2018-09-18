@@ -6,7 +6,7 @@ import java.util.Set;
  * @author: yuanwq
  * @date: 2018/4/19
  */
-public interface ICond<T extends ICond> extends IClause {
+public interface ICond<T extends ICond> extends ISearchClause {
   /**
    * 关联的所有field集合。实际上这个field有可能是个表达式(FilterUnit中的field)
    */

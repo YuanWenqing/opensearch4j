@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author yuanwq
  */
-public class QueryClause implements IClause {
+public class QueryClause implements ISearchClause {
   private IQueryCond cond;
 
   public QueryClause() {
@@ -46,24 +46,24 @@ public class QueryClause implements IClause {
     if (cond == null) {
       return StringUtils.EMPTY;
     }
-    return cond.toClause(new StringBuilder()).toString();
+    return cond.appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("query=");
     if (cond == null || cond.isEmpty()) {
       // 避免空query
       sb.append("''");
     } else {
-      cond.toClause(sb);
+      cond.appendSearchParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
 }

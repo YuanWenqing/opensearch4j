@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author yuanwq
  */
-public class FilterClause implements IClause {
+public class FilterClause implements ISearchClause {
   private IFilterCond cond;
 
   public FilterClause() {
@@ -39,22 +39,22 @@ public class FilterClause implements IClause {
     if (cond == null) {
       return StringUtils.EMPTY;
     }
-    return cond.toClause(new StringBuilder()).toString();
+    return cond.appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("filter=");
     if (isEmpty()) {
       return sb;
     }
-    cond.toClause(sb);
+    cond.appendSearchParams(sb);
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
 }

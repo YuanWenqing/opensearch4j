@@ -23,14 +23,14 @@ public class FieldFilter implements IFilterCond {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append(left).append(filterOp.getOp()).append(right);
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override

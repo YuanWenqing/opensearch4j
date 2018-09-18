@@ -6,7 +6,7 @@ package top.fangwz.aliyun.opensearch;
 /**
  * @author yuanwq
  */
-public class DistinctUnit implements IClause {
+public class DistinctUnit implements ISearchClause {
 
   private final String key;
   private int times = 1;
@@ -73,7 +73,7 @@ public class DistinctUnit implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("dist_key:").append(key);
     sb.append(",dist_count:").append(count);
     sb.append(",dist_times:").append(times);
@@ -87,6 +87,6 @@ public class DistinctUnit implements IClause {
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 }

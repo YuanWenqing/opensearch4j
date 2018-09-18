@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author yuanwq
  */
-public class SortClause implements IClause {
+public class SortClause implements ISearchClause {
   public static final String ASC = "+";
   public static final String DESC = "-";
   public static final String DEFAULT_SORT_FIELD = "RANK";
@@ -59,14 +59,14 @@ public class SortClause implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("sort=").append(getSortText());
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
 }

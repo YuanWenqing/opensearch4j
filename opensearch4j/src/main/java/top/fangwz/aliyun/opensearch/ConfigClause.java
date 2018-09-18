@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  * 
  * @author yuanwq
  */
-public class ConfigClause implements IClause {
+public class ConfigClause implements ISearchClause {
   private int start = 0;
   private int hit = 10;
   private String format = "json";
@@ -60,7 +60,7 @@ public class ConfigClause implements IClause {
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("config=");
     sb.append("start:").append(start);
     sb.append(",hit:").append(hit);
@@ -71,7 +71,7 @@ public class ConfigClause implements IClause {
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
 }

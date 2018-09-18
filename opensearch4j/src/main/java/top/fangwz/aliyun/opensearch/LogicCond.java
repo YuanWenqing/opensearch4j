@@ -17,7 +17,7 @@ import java.util.Set;
  * @author yuanwq
  */
 public abstract class LogicCond<U extends ICond<U>, T extends LogicCond>
-    implements IClause {
+    implements ISearchClause {
   protected static enum LogicOp {
     AND,
     OR,
@@ -51,7 +51,7 @@ public abstract class LogicCond<U extends ICond<U>, T extends LogicCond>
   }
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     if (conds.size() == 0) {
       return sb;
     }
@@ -69,7 +69,7 @@ public abstract class LogicCond<U extends ICond<U>, T extends LogicCond>
       if (ifWrap) {
         sb.append("(");
       }
-      cond.toClause(sb);
+      cond.appendSearchParams(sb);
       if (ifWrap) {
         sb.append(")");
       }
@@ -87,7 +87,7 @@ public abstract class LogicCond<U extends ICond<U>, T extends LogicCond>
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
   public Set<String> getAllFields() {

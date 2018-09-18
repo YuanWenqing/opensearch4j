@@ -8,19 +8,19 @@ import java.util.LinkedHashMap;
  * @author: yuanwq
  * @date: 2018/6/8
  */
-public class KvPairsClause extends LinkedHashMap<String, String> implements IClause {
+public class KvPairsClause extends LinkedHashMap<String, String> implements ISearchClause {
   private static final Joiner.MapJoiner joiner =
       Joiner.on(",").withKeyValueSeparator(":").useForNull("");
 
   @Override
-  public StringBuilder toClause(StringBuilder sb) {
+  public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("kvpairs=").append(pairString());
     return sb;
   }
 
   @Override
   public String toString() {
-    return toClause(new StringBuilder()).toString();
+    return appendSearchParams(new StringBuilder()).toString();
   }
 
   public String pairString() {
