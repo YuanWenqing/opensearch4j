@@ -1,52 +1,26 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.clause;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Collections;
-import java.util.Set;
+import lombok.Getter;
+import top.fangwz.aliyun.opensearch.IQueryCond;
+import top.fangwz.aliyun.opensearch.ISearchClause;
 
 /**
  * @author yuanwq
  */
+@Getter
 public class QueryClause implements ISearchClause {
   private IQueryCond cond;
-
-  public QueryClause() {
-    this(null);
-  }
-
-  public QueryClause(IQueryCond cond) {
-    this.cond = cond;
-  }
 
   public QueryClause setCond(IQueryCond cond) {
     this.cond = cond;
     return this;
   }
 
-  public IQueryCond getCond() {
-    return cond;
-  }
-
   public boolean isEmpty() {
     return cond == null || cond.isEmpty();
-  }
-
-  public Set<String> allIndexes() {
-    return cond == null ? Collections.emptySet() : cond.getAllFields();
-  }
-
-  /**
-   * query子句的值
-   */
-  public String getQueryText() {
-    if (cond == null) {
-      return StringUtils.EMPTY;
-    }
-    return cond.appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override
