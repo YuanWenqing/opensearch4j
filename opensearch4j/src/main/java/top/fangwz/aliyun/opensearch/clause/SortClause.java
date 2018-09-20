@@ -38,10 +38,10 @@ public class SortClause implements ISearchClause {
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
+    sb.append("sort=");
     if (isEmpty()) {
       return sb;
     }
-    sb.append("sort=");
     boolean first = true;
     for (Map.Entry<String, Direction> entry : sorts.entrySet()) {
       if (first) {

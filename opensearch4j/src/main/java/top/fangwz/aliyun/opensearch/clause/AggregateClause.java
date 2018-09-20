@@ -34,8 +34,8 @@ public class AggregateClause implements ISearchClause {
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
-    if (isEmpty()) return sb;
     sb.append("aggregate=");
+    if (isEmpty()) return sb;
     boolean first = true;
     for (AggregateUnit aggregate : aggregates.values()) {
       if (first) {

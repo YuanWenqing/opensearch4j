@@ -34,8 +34,8 @@ public class DistinctClause implements ISearchClause {
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
-    if (isEmpty()) return sb;
     sb.append("distinct=");
+    if (isEmpty()) return sb;
     boolean first = true;
     for (DistinctUnit distinct : distincts.values()) {
       if (first) {
