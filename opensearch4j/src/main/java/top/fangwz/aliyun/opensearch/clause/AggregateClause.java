@@ -3,26 +3,29 @@
  */
 package top.fangwz.aliyun.opensearch.clause;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author yuanwq
  */
 public class AggregateClause implements ISearchClause {
-  private final List<AggregateUnit> aggregates = Lists.newArrayList();
+  private final Map<String, AggregateUnit> aggregates = Maps.newLinkedHashMap();
 
+  /**
+   * groupKey相同的aggregate会覆盖之前的设置
+   */
   public AggregateClause add(AggregateUnit aggregate) {
-    aggregates.add(aggregate);
+    aggregates.put(aggregate.getGroupKey(), aggregate);
     return this;
   }
 
   public Collection<AggregateUnit> getAggregates() {
-    return Collections.unmodifiableCollection(aggregates);
+    return Collections.unmodifiableCollection(aggregates.values());
   }
 
   public boolean isEmpty() {
@@ -34,7 +37,7 @@ public class AggregateClause implements ISearchClause {
     if (isEmpty()) return sb;
     sb.append("aggregate=");
     boolean first = true;
-    for (AggregateUnit aggregate : aggregates) {
+    for (AggregateUnit aggregate : aggregates.values()) {
       if (first) {
         first = false;
       } else {
