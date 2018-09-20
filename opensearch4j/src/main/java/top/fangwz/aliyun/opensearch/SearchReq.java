@@ -9,6 +9,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import top.fangwz.aliyun.opensearch.clause.ConfigClause;
 
 import java.util.List;
 
