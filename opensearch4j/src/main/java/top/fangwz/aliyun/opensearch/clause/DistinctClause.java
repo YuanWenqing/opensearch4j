@@ -1,11 +1,13 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.clause;
 
 import com.google.common.collect.Maps;
+import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -14,13 +16,16 @@ import java.util.Map;
 public class DistinctClause implements ISearchClause {
   private final Map<String, DistinctUnit> distincts = Maps.newLinkedHashMap();
 
+  /**
+   * distKey相同的distinct会覆盖之前的设置
+   */
   public DistinctClause add(DistinctUnit distinct) {
     distincts.put(distinct.getKey(), distinct);
     return this;
   }
 
   public Collection<DistinctUnit> getDistincts() {
-    return distincts.values();
+    return Collections.unmodifiableCollection(distincts.values());
   }
 
   public boolean isEmpty() {
@@ -29,8 +34,8 @@ public class DistinctClause implements ISearchClause {
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
-    sb.append("distinct=");
     if (isEmpty()) return sb;
+    sb.append("distinct=");
     boolean first = true;
     for (DistinctUnit distinct : distincts.values()) {
       if (first) {

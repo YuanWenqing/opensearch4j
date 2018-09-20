@@ -1,11 +1,19 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.clause;
+
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+import top.fangwz.aliyun.opensearch.IFilterCond;
+import top.fangwz.aliyun.opensearch.ISearchClause;
+
+import static com.google.common.base.Preconditions.*;
 
 /**
  * @author yuanwq
  */
+@Getter
 public class DistinctUnit implements ISearchClause {
 
   private final String key;
@@ -15,58 +23,49 @@ public class DistinctUnit implements ISearchClause {
   private boolean updateTotalHit = false;
   private IFilterCond filter;
 
+  /**
+   * @param key 要聚合的字段
+   */
   public DistinctUnit(String key) {
+    checkArgument(StringUtils.isNotBlank(key), "distKey must not blank");
     this.key = key;
   }
 
-  public String getKey() {
-    return key;
-  }
-
-  public int getTimes() {
-    return times;
-  }
-
-  /** 抽取轮数 */
+  /**
+   * 抽取轮数
+   */
   public DistinctUnit setTimes(int times) {
     this.times = times;
     return this;
   }
 
-  public int getCount() {
-    return count;
-  }
-
-  /** 每轮抽取的文档数 */
+  /**
+   * 每轮抽取的文档数
+   */
   public DistinctUnit setCount(int count) {
     this.count = count;
     return this;
   }
 
-  public boolean getReserved() {
-    return reserved;
-  }
-
-  /** 是否保留抽取后剩余的文档，若false，则搜索结果的total可能不准 */
+  /**
+   * 是否保留抽取后剩余的文档，若false，则搜索结果的total可能不准
+   */
   public DistinctUnit setReserved(boolean reserved) {
     this.reserved = reserved;
     return this;
   }
 
-  public boolean getUpdateTotalHit() {
-    return updateTotalHit;
-  }
-
-  /** reserved=false && updateTotalHit=true： 搜索结果的total会被减去distinct丢弃的文档个数 */
+  /**
+   * reserved=false && updateTotalHit=true： 搜索结果的total会被减去distinct丢弃的文档个数
+   */
   public DistinctUnit setUpdateTotalHit(boolean updateTotalHit) {
     this.updateTotalHit = updateTotalHit;
     return this;
   }
 
-  public IFilterCond getFilter() {
-    return filter;
-  }
-
+  /**
+   * 过滤条件，被过滤的doc不参与distinct，只在后面的排序中，这些被过滤的doc将和被distinct出来的第一组doc一起参与排序。默认是全部参与distinct。
+   */
   public DistinctUnit setFilter(IFilterCond filter) {
     this.filter = filter;
     return this;
@@ -80,7 +79,8 @@ public class DistinctUnit implements ISearchClause {
     sb.append(",reserved:").append(reserved);
     sb.append(",update_total_hit:").append(updateTotalHit);
     if (filter != null) {
-      sb.append(",dist_filter:").append(filter.toString());
+      sb.append(",dist_filter:");
+      filter.appendSearchParams(sb);
     }
     return sb;
   }
