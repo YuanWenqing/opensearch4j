@@ -10,7 +10,8 @@ import java.util.Collection;
 /**
  * @author yuanwq
  */
-public class QueryCond extends LogicCond<IQueryCond, QueryCond> implements ISearchClause, IQueryCond {
+public class QueryCond extends LogicCond<IQueryCond, QueryCond>
+    implements ISearchClause, IQueryCond {
 
   public static QueryCond and() {
     return new QueryCond(LogicOp.AND);
