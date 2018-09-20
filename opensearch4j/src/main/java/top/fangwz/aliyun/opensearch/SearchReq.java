@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.clause.ConfigClause;
+import top.fangwz.aliyun.opensearch.clause.SortClause;
 
 import java.util.List;
 

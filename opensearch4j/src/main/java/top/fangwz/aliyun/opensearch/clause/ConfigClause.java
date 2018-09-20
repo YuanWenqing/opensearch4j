@@ -3,6 +3,7 @@
  */
 package top.fangwz.aliyun.opensearch.clause;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import top.fangwz.aliyun.opensearch.ISearchClause;
 
@@ -82,15 +83,12 @@ public class ConfigClause implements ISearchClause {
     return appendSearchParams(new StringBuilder()).toString();
   }
 
+  @AllArgsConstructor
   public enum Format {
     JSON("json"),
     FULL_JSON("fulljson"),
     XML("xml");
 
     private final String paramValue;
-
-    Format(String paramValue) {
-      this.paramValue = paramValue;
-    }
   }
 }
