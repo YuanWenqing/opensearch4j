@@ -1,27 +1,18 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.clause;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.Getter;
+import top.fangwz.aliyun.opensearch.IFilterCond;
+import top.fangwz.aliyun.opensearch.ISearchClause;
 
 /**
  * @author yuanwq
  */
+@Getter
 public class FilterClause implements ISearchClause {
   private IFilterCond cond;
-
-  public FilterClause() {
-    this(null);
-  }
-
-  public FilterClause(IFilterCond cond) {
-    this.cond = cond;
-  }
-
-  public IFilterCond getCond() {
-    return cond;
-  }
 
   public FilterClause setCond(IFilterCond cond) {
     this.cond = cond;
@@ -30,16 +21,6 @@ public class FilterClause implements ISearchClause {
 
   public boolean isEmpty() {
     return cond == null || cond.isEmpty();
-  }
-
-  /**
-   * filter子句的值
-   */
-  public String getFilterText() {
-    if (cond == null) {
-      return StringUtils.EMPTY;
-    }
-    return cond.appendSearchParams(new StringBuilder()).toString();
   }
 
   @Override
