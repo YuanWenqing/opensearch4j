@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import top.fangwz.aliyun.opensearch.clause.AggregateUnit;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -118,7 +119,7 @@ public class AliSearch {
       for (AggregateUnit aggregate : req.getAggregate().getAggregates()) {
         search
             .addAggregate(aggregate.getGroupKey(), aggregate.getAggFunText(), aggregate.getRange(),
-                null, aggregate.getAggFilter() == null ? null : aggregate.getAggFilter().toString(),
+                null, aggregate.getFilter() == null ? null : aggregate.getFilter().toString(),
                 null, null);
       }
     }
