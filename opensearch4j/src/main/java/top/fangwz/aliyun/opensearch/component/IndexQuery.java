@@ -4,10 +4,9 @@
 package top.fangwz.aliyun.opensearch.component;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.LookupTranslator;
-import top.fangwz.aliyun.opensearch.IQueryCond;
-import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -15,7 +14,8 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class IndexQuery implements ISearchClause, IQueryCond {
+@ToString
+public class IndexQuery extends AbstractQueryCond {
   private static final LookupTranslator SINGLE_QUOTATION_ESCAPER =
       new LookupTranslator(new String[][]{{"'", "\\'"}, {"\\", "\\\\"}});
   private static final LookupTranslator DOUBLE_QUOTATION_ESCAPER =
@@ -86,8 +86,7 @@ public class IndexQuery implements ISearchClause, IQueryCond {
   }
 
   @Override
-  public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+  public boolean priorTo(LogicalOp op) {
+    return true;
   }
-
 }
