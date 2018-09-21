@@ -1,7 +1,7 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.ISearchClause;
 import top.fangwz.aliyun.opensearch.ISearchParamsBuilder;
 
 import java.util.*;
@@ -20,7 +19,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class AggregateUnit implements ISearchClause {
+public class AggregateUnit implements ISearchParamsBuilder {
   private final String groupKey;
   private final List<AggregateFunction> aggregateFunctions = Lists.newArrayList();
   private final SortedSet<Number> range =

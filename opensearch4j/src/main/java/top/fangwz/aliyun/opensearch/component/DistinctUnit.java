@@ -1,12 +1,12 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.component;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.ISearchClause;
+import top.fangwz.aliyun.opensearch.ISearchParamsBuilder;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class DistinctUnit implements ISearchClause {
+public class DistinctUnit implements ISearchParamsBuilder {
 
   private final String key;
   private int times = 1;

@@ -5,6 +5,7 @@ package top.fangwz.aliyun.opensearch.clause;
 
 import com.google.common.collect.Maps;
 import top.fangwz.aliyun.opensearch.ISearchClause;
+import top.fangwz.aliyun.opensearch.component.DistinctUnit;
 
 import java.util.Collection;
 import java.util.Collections;
