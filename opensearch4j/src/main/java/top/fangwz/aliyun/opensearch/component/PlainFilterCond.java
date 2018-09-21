@@ -2,7 +2,6 @@ package top.fangwz.aliyun.opensearch.component;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import top.fangwz.aliyun.opensearch.IFilterCond;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -11,7 +10,7 @@ import static com.google.common.base.Preconditions.*;
  * @date: 2018/9/21
  */
 @Data
-public class PlainFilterCond implements IFilterCond {
+public class PlainFilterCond extends AbstractFilterCond {
   private final String plainCond;
 
   private PlainFilterCond(String plainCond) {

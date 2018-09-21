@@ -8,7 +8,7 @@ import top.fangwz.aliyun.opensearch.IFilterCond;
  * @date: 2018/9/21
  */
 @Data
-public class LogicalFilterCond implements IFilterCond {
+public class LogicalFilterCond extends AbstractFilterCond {
   private final IFilterCond left;
   private final LogicalOp op;
   private final IFilterCond right;
@@ -39,12 +39,5 @@ public class LogicalFilterCond implements IFilterCond {
     return this.op == op;
   }
 
-  public LogicalFilterCond and(IFilterCond right) {
-    return new LogicalFilterCond(this, LogicalOp.AND, right);
-  }
-
-  public LogicalFilterCond or(IFilterCond right) {
-    return new LogicalFilterCond(this, LogicalOp.OR, right);
-  }
 }
 

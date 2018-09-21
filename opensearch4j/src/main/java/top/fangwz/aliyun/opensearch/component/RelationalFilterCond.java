@@ -2,14 +2,13 @@ package top.fangwz.aliyun.opensearch.component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import top.fangwz.aliyun.opensearch.IFilterCond;
 
 /**
  * @author: yuanwq
  * @date: 2018/9/20
  */
 @Data
-public class RelationalFilterCond implements IFilterCond {
+public class RelationalFilterCond extends AbstractFilterCond {
   private final IExpression left;
   private final RelationalOp op;
   private final IExpression right;

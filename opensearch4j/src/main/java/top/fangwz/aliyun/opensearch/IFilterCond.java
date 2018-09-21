@@ -11,12 +11,16 @@ public interface IFilterCond extends ISearchParamsBuilder {
    */
   boolean priorTo(LogicalOp op);
 
+  IFilterCond and(IFilterCond right);
+
+  IFilterCond or(IFilterCond right);
+
   /**
    * @author: yuanwq
    * @date: 2018/9/21
    */
   enum LogicalOp {
     AND,
-    OR;
+    OR
   }
 }
