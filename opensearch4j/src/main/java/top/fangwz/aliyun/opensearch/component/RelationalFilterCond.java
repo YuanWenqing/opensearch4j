@@ -22,6 +22,11 @@ public class RelationalFilterCond implements IFilterCond {
     return sb;
   }
 
+  @Override
+  public boolean priorTo(LogicalOp op) {
+    return true;
+  }
+
   @AllArgsConstructor
   public enum RelationalOp {
     EQ("="),
