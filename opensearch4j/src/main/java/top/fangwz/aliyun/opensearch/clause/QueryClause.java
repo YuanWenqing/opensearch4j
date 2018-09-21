@@ -20,13 +20,13 @@ public class QueryClause implements ISearchClause {
   }
 
   public boolean isEmpty() {
-    return cond == null || cond.isEmpty();
+    return cond == null;
   }
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("query=");
-    if (cond == null || cond.isEmpty()) {
+    if (cond == null) {
       // 避免空query
       sb.append("''");
     } else {

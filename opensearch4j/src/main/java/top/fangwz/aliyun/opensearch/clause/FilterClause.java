@@ -20,7 +20,7 @@ public class FilterClause implements ISearchClause {
   }
 
   public boolean isEmpty() {
-    return cond == null || cond.isEmpty();
+    return cond == null;
   }
 
   @Override
