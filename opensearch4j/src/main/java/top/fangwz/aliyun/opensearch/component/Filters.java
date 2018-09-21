@@ -4,7 +4,7 @@ package top.fangwz.aliyun.opensearch.component;
  * @author: yuanwq
  * @date: 2018/9/21
  */
-public interface RelationalFilters {
+public interface Filters {
   interface Values {
     static RelationalFilterCond eq(String field, Object value) {
       return new RelationalFilterCond(Field.of(field), RelationalFilterCond.RelationalOp.EQ, Value.of(value));
