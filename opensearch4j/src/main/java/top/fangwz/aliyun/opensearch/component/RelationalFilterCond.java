@@ -1,4 +1,4 @@
-package top.fangwz.aliyun.opensearch.expr;
+package top.fangwz.aliyun.opensearch.component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import top.fangwz.aliyun.opensearch.IFilterCond;
  * @date: 2018/9/20
  */
 @Data
-public class RelationalCond implements IFilterCond {
+public class RelationalFilterCond implements IFilterCond {
   private final IExpression left;
   private final RelationalOp op;
   private final IExpression right;

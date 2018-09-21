@@ -1,7 +1,7 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch.expr;
+package top.fangwz.aliyun.opensearch.component;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;

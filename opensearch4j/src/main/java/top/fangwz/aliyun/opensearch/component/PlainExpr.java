@@ -1,4 +1,4 @@
-package top.fangwz.aliyun.opensearch.expr;
+package top.fangwz.aliyun.opensearch.component;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
