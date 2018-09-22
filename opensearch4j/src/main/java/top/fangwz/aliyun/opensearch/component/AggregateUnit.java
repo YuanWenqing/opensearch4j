@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.*;
 @Getter
 public class AggregateUnit implements ISearchParamsBuilder {
   private final String groupKey;
-  private final List<AggregateFunction> aggregateFunctions = Lists.newArrayList();
+  private final List<AggregateDef> aggregateDefs = Lists.newArrayList();
   private final SortedSet<Number> range =
       Sets.newTreeSet(Comparator.comparingDouble(Number::doubleValue));
   private IFilterCond filter;
@@ -38,25 +38,30 @@ public class AggregateUnit implements ISearchParamsBuilder {
   }
 
   public AggregateUnit count() {
-    this.aggregateFunctions.add(new AggregateFunction(Function.COUNT, StringUtils.EMPTY));
+    this.aggregateDefs.add(
+        new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.COUNT,
+            StringUtils.EMPTY));
     return this;
   }
 
   public AggregateUnit sum(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for sum must not blank");
-    this.aggregateFunctions.add(new AggregateFunction(Function.SUM, field));
+    this.aggregateDefs
+        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.SUM, field));
     return this;
   }
 
   public AggregateUnit max(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for max must not blank");
-    this.aggregateFunctions.add(new AggregateFunction(Function.MAX, field));
+    this.aggregateDefs
+        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.MAX, field));
     return this;
   }
 
   public AggregateUnit min(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for min must not blank");
-    this.aggregateFunctions.add(new AggregateFunction(Function.MIN, field));
+    this.aggregateDefs
+        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.MIN, field));
     return this;
   }
 
@@ -109,13 +114,13 @@ public class AggregateUnit implements ISearchParamsBuilder {
   public StringBuilder appendSearchParams(StringBuilder sb) {
     sb.append("group_key:").append(groupKey).append(",agg_fun:");
     boolean first = true;
-    for (AggregateFunction aggregateFunction : aggregateFunctions) {
+    for (AggregateDef aggregateDef : aggregateDefs) {
       if (first) {
         first = false;
       } else {
         sb.append("#");
       }
-      aggregateFunction.appendSearchParams(sb);
+      aggregateDef.appendSearchParams(sb);
     }
     if (!range.isEmpty()) {
       sb.append(",range:").append(StringUtils.join(range, "~"));
@@ -141,25 +146,18 @@ public class AggregateUnit implements ISearchParamsBuilder {
     return appendSearchParams(new StringBuilder()).toString();
   }
 
-  @AllArgsConstructor
-  public enum Function {
-    COUNT("count"),
-    SUM("sum"),
-    MAX("max"),
-    MIN("min");
-
-    private final String paramValue;
-  }
-
   @Getter
   @AllArgsConstructor
-  public static class AggregateFunction implements ISearchParamsBuilder {
-    private final Function function;
-    private final String field;
+  public static class AggregateDef implements ISearchParamsBuilder {
+    private final top.fangwz.aliyun.opensearch.component.AggregateFunction function;
+    /**
+     * sum、max、min的内容支持基本的算术运算；
+     */
+    private final String expression;
 
     @Override
     public StringBuilder appendSearchParams(StringBuilder sb) {
-      sb.append(function.paramValue).append("(").append(field).append(")");
+      sb.append(function.getFunctionName()).append("(").append(expression).append(")");
       return sb;
     }
   }

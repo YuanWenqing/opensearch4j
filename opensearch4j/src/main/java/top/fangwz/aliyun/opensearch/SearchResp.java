@@ -6,6 +6,7 @@ package top.fangwz.aliyun.opensearch;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import top.fangwz.aliyun.opensearch.component.Facet;
 
 import java.util.Collections;
 import java.util.List;

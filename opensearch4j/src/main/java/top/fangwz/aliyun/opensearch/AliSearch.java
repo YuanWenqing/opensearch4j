@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.component.AggregateUnit;
 import top.fangwz.aliyun.opensearch.component.DistinctUnit;
+import top.fangwz.aliyun.opensearch.component.Facet;
 
 import java.io.IOException;
 import java.util.Collections;
