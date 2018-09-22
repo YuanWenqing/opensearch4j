@@ -3,11 +3,9 @@
  */
 package top.fangwz.aliyun.opensearch;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;
 import lombok.Data;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -22,27 +20,12 @@ public class Facet {
     this.groupKey = groupKey;
   }
 
-  public static Facet of(JsonNode facetNode) {
-    // TODO: SearchRespParser
-    Facet facet = new Facet(facetNode.get("key").asText());
-    for (JsonNode node : facetNode.get("items")) {
-      String itemValue = node.get("value").asText();
-      FacetItem item = new FacetItem(itemValue);
-      facet.itemMap.put(itemValue, item);
-      Iterator<String> iter = node.fieldNames();
-      while (iter.hasNext()) {
-        String aggFuncName = iter.next();
-        if ("value".equals(aggFuncName)) {
-          continue;
-        }
-        item.aggregateValueMap.put(aggFuncName, node.get(aggFuncName).asLong());
-      }
-    }
-    return facet;
-  }
-
   public FacetItem getItem(String itemValue) {
     return itemMap.get(itemValue);
+  }
+
+  public void putItem(String itemValue, FacetItem item) {
+    this.itemMap.put(itemValue, item);
   }
 
   @Data
@@ -58,5 +41,8 @@ public class Facet {
       return aggregateValueMap.get(aggFuncName);
     }
 
+    public void putAggregateValue(String aggFuncName, Number value) {
+      this.aggregateValueMap.put(aggFuncName, value);
+    }
   }
 }

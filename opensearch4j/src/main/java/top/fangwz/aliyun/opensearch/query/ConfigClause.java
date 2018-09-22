@@ -72,7 +72,7 @@ public class ConfigClause implements ISearchClause {
     sb.append("config=");
     sb.append("start:").append(start);
     sb.append(",hit:").append(hit);
-    sb.append(",format:").append(format.paramValue);
+    sb.append(",format:").append(format.formatName);
     sb.append(",rerank_size:").append(rerankSize);
     return sb;
   }
@@ -83,11 +83,12 @@ public class ConfigClause implements ISearchClause {
   }
 
   @AllArgsConstructor
+  @Getter
   public enum Format {
     JSON("json");
 //    FULL_JSON("fulljson"),
 //    XML("xml");
 
-    private final String paramValue;
+    private final String formatName;
   }
 }

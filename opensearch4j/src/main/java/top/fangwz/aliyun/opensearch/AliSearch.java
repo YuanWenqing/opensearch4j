@@ -6,61 +6,109 @@ package top.fangwz.aliyun.opensearch;
 import com.aliyun.opensearch.CloudsearchClient;
 import com.aliyun.opensearch.CloudsearchSearch;
 import com.aliyun.opensearch.CloudsearchSuggest;
+import com.aliyun.opensearch.object.KeyTypeEnum;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import top.fangwz.aliyun.opensearch.query.ConfigClause;
+import top.fangwz.aliyun.opensearch.query.KvPairsClause;
+import top.fangwz.aliyun.opensearch.query.SortClause;
+import top.fangwz.aliyun.opensearch.query.aggregate.AggregateClause;
 import top.fangwz.aliyun.opensearch.query.aggregate.AggregateUnit;
+import top.fangwz.aliyun.opensearch.query.distinct.DistinctClause;
 import top.fangwz.aliyun.opensearch.query.distinct.DistinctUnit;
+import top.fangwz.aliyun.opensearch.query.filter.FilterClause;
+import top.fangwz.aliyun.opensearch.query.query.QueryClause;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.*;
 
 /**
  * @author yuanwq
  */
+@Data
 public class AliSearch {
-
   private final CloudsearchClient searchClient;
-  private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-  public AliSearch(CloudsearchClient searchClient) {
-    this.searchClient = searchClient;
-    this.objectMapper = new ObjectMapper();
+  public AliSearch(CloudsearchClient searcherClient) {
+    this.searchClient = searcherClient;
   }
 
-  public <T> SearchResp<T> search(SearchReq<T> req) throws IOException {
+  public AliSearch(String accessKey, String accessSecret, String host) {
+    checkArgument(StringUtils.isNotBlank(accessKey), "accessKey must not blank");
+    checkArgument(StringUtils.isNotBlank(accessSecret), "accessSecret must not blank");
+    checkArgument(StringUtils.isNotBlank(host), "host must not blank");
+    Map<String, Object> opts = Maps.newHashMap();
+    opts.put("gzip", true);
+    try {
+      this.searchClient =
+          new CloudsearchClient(accessKey, accessSecret, host, opts, KeyTypeEnum.ALIYUN);
+    } catch (UnknownHostException e) {
+      // actually already handled by checkArgument
+      throw new RuntimeException(e);
+    }
+  }
+
+  public <T> SearchResp<T> search(SearchReq req, ItemParser<T> parser) throws IOException {
     CloudsearchSearch search = buildSearch(req);
     String respText = search.search();
     JsonNode root = objectMapper.readTree(respText);
     SearchResp<T> resp = new SearchResp<>();
     resp.setRawResponse(respText);
     resp.setDebugInfo(search.getDebugInfo());
-    resp.setQuery(req.appendQueryParams(new StringBuilder()).toString());
-    resp.setStatus(root.get("status").asText());
+    resp.setQuery(req.getQuery().appendQueryParams(new StringBuilder()).toString());
+    resp.setStatus(SearchResp.Status.valueOf(root.get("status").asText()));
     resp.setRequestId(root.get("request_id").asText());
     resp.addErrors(parseErrors(root.get("errors")));
-    JsonNode result = root.get("result");
-    resp.addComputeCosts(parseComputeCosts(result.get("compute_cost")));
-    ArrayNode items = (ArrayNode) result.get("items");
+    SearchResp.Result<T> result = new SearchResp.Result<>();
+    resp.setResult(result);
+    JsonNode resultNode = root.get("result");
+    result.addComputeCosts(parseComputeCosts(resultNode.get("compute_cost")));
+    ArrayNode items = (ArrayNode) resultNode.get("items");
     if (items != null) {
       for (JsonNode node : items) {
-        resp.addValue(req.getTranslator().apply(node));
+        result.addItem(parser.parse(node));
       }
     }
-    resp.setTotal(result.get("total").asInt());
-    if (req.getAggregate() != null) {
-      ArrayNode facets = (ArrayNode) result.get("facet");
+    result.setTotal(resultNode.get("total").asInt());
+    if (req.getQuery().getAggregate() != null) {
+      ArrayNode facets = (ArrayNode) resultNode.get("facet");
       if (facets != null) {
         for (JsonNode facetNode : facets) {
-          resp.addFacet(new Facet(facetNode));
+          result.addFacet(parseFacet(facetNode));
         }
       }
     }
     return resp;
+  }
+
+  private Facet parseFacet(JsonNode facetNode) {
+    Facet facet = new Facet(facetNode.get("key").asText());
+    for (JsonNode node : facetNode.get("items")) {
+      String itemValue = node.get("value").asText();
+      Facet.FacetItem item = new Facet.FacetItem(itemValue);
+      facet.putItem(itemValue, item);
+      Iterator<String> iterator = node.fieldNames();
+      while (iterator.hasNext()) {
+        String aggFuncName = iterator.next();
+        if ("value".equals(aggFuncName)) {
+          continue;
+        }
+        item.putAggregateValue(aggFuncName, node.get(aggFuncName).numberValue());
+      }
+    }
+    return facet;
   }
 
   private List<Error> parseErrors(JsonNode errorNode) {
@@ -86,56 +134,112 @@ public class AliSearch {
     return costs;
   }
 
-  private CloudsearchSearch buildSearch(SearchReq<?> req) {
+  private CloudsearchSearch buildSearch(SearchReq req) {
     CloudsearchSearch search = new CloudsearchSearch(searchClient);
     search.addIndex(req.getAppName());
-    if (StringUtils.isNotBlank(req.getFormulaName())) {
-      search.setFormulaName(req.getFormulaName());
+    if (StringUtils.isNotBlank(req.getSecondRankFormula())) {
+      search.setFormulaName(req.getSecondRankFormula());
     }
-    if (StringUtils.isNotBlank(req.getFirstFormulaName())) {
-      search.setFirstFormulaName(req.getFirstFormulaName());
+    if (StringUtils.isNotBlank(req.getFirstRankFormula())) {
+      search.setFirstFormulaName(req.getFirstRankFormula());
     }
     if (!req.getQps().isEmpty()) {
-      search.addQpNames(req.getQps());
-    }
-    search.setQueryString(req.getQuery().getQueryText());
-    if (req.getConfig() != null) {
-      search.setStartHit(req.getConfig().getStart());
-      search.setHits(req.getConfig().getHit());
-      search.setRerankSize(req.getConfig().getRerankSize());
-    }
-    search.setFormat("json");
-    if (req.getFilter() != null && StringUtils.isNotBlank(req.getFilter().getFilterText())) {
-      search.addFilter(req.getFilter().getFilterText());
-    }
-    if (req.getSort() != null && !req.getSort().isEmpty()) {
-      for (Map.Entry<String, String> sort : req.getSort().getSorts()) {
-        search.addSort(sort.getKey(), sort.getValue());
-      }
+      search.addQpNames(Lists.newArrayList(req.getQps()));
     }
     if (!req.getFetchFields().isEmpty()) {
-      search.addFetchFields(req.getFetchFields());
+      search.addFetchFields(Lists.newArrayList(req.getFetchFields()));
     }
-    if (req.getAggregate() != null) {
-      for (AggregateUnit aggregate : req.getAggregate().getAggregates()) {
-        search
-            .addAggregate(aggregate.getGroupKey(), aggregate.getAggFunText(), aggregate.getRange(),
-                null, aggregate.getFilter() == null ? null : aggregate.getFilter().toString(),
-                null, null);
-      }
-    }
-    if (req.getDistinct() != null) {
-      for (DistinctUnit unit : req.getDistinct().getDistincts()) {
-        search.addDistinct(unit.getKey(), unit.getCount(), unit.getTimes(),
-            String.valueOf(unit.getReserved()),
-            unit.getFilter() == null ? null : unit.getFilter().toString(),
-            String.valueOf(unit.getUpdateTotalHit()));
-      }
-    }
-    if (req.getKvpairs() != null && !req.getKvpairs().isEmpty()) {
-      search.setPair(req.getKvpairs().pairString());
-    }
+    setQuery(search, req.getQuery().getQuery());
+    setConfig(search, req.getQuery().getConfig());
+    setFilter(search, req.getQuery().getFilter());
+    setSort(search, req.getQuery().getSort());
+    setAggregate(search, req.getQuery().getAggregate());
+    setDistinct(search, req.getQuery().getDistinct());
+    setKvPairs(search, req.getQuery().getKvpairs());
     return search;
+  }
+
+  private void setQuery(CloudsearchSearch search, QueryClause queryClause) {
+    if (queryClause == null || queryClause.getCond() == null) {
+      search.setQueryString(StringUtils.EMPTY);
+    } else {
+      search
+          .setQueryString(queryClause.getCond().appendQueryParams(new StringBuilder()).toString());
+    }
+  }
+
+  private void setConfig(CloudsearchSearch search, ConfigClause configClause) {
+    search.setFormat(ConfigClause.Format.JSON.getFormatName());
+    if (configClause == null) {
+      return;
+    }
+    search.setStartHit(configClause.getStart());
+    search.setHits(configClause.getHit());
+    search.setRerankSize(configClause.getRerankSize());
+  }
+
+  private void setFilter(CloudsearchSearch search, FilterClause filterClause) {
+    if (filterClause == null || filterClause.isEmpty()) {
+      return;
+    }
+    search.addFilter(filterClause.getCond().appendQueryParams(new StringBuilder()).toString());
+  }
+
+  private void setSort(CloudsearchSearch search, SortClause sortClause) {
+    if (sortClause == null || sortClause.isEmpty()) {
+      return;
+    }
+    for (Map.Entry<String, SortClause.Direction> sort : sortClause.getSorts()) {
+      search.addSort(sort.getKey(), sort.getValue().getDirectionChar());
+    }
+  }
+
+  private void setDistinct(CloudsearchSearch search, DistinctClause distinctClause) {
+    if (distinctClause == null) {
+      return;
+    }
+    for (DistinctUnit distinctUnit : distinctClause.getDistincts()) {
+      String filter = null;
+      if (distinctUnit.getFilter() != null) {
+        filter = distinctUnit.getFilter().appendQueryParams(new StringBuilder()).toString();
+      }
+      search.addDistinct(distinctUnit.getKey(), distinctUnit.getCount(), distinctUnit.getTimes(),
+          String.valueOf(distinctUnit.isReserved()), filter,
+          String.valueOf(distinctUnit.isUpdateTotalHit()));
+    }
+  }
+
+  private void setAggregate(CloudsearchSearch search, AggregateClause aggregateClause) {
+    if (aggregateClause == null || aggregateClause.isEmpty()) {
+      return;
+    }
+    for (AggregateUnit aggregate : aggregateClause.getAggregates()) {
+      String maxGroup = null;
+      if (aggregate.getMaxGroup() > 0) {
+        maxGroup = String.valueOf(aggregate.getMaxGroup());
+      }
+      String filter = null;
+      if (aggregate.getFilter() != null) {
+        filter = aggregate.getFilter().appendQueryParams(new StringBuilder()).toString();
+      }
+      String samplerThreshold = null;
+      if (aggregate.getSamplerThreshold() > 0) {
+        samplerThreshold = String.valueOf(aggregate.getSamplerThreshold());
+      }
+      String samplerStep = null;
+      if (aggregate.getSamplerStep() > 0) {
+        samplerStep = String.valueOf(aggregate.getSamplerStep());
+      }
+      search.addAggregate(aggregate.getGroupKey(), aggregate.getJoinedFunction(),
+          aggregate.getJoinedRange(), maxGroup, filter, samplerThreshold, samplerStep);
+    }
+  }
+
+  private void setKvPairs(CloudsearchSearch search, KvPairsClause kvPairsClause) {
+    if (kvPairsClause == null || kvPairsClause.isEmpty()) {
+      return;
+    }
+    search.setPair(kvPairsClause.pairString());
   }
 
   public SuggestResp suggest(SuggestReq req) throws IOException {
@@ -148,13 +252,11 @@ public class AliSearch {
     SuggestResp resp = new SuggestResp();
     resp.setRawResponse(respText);
     resp.setDebugInfo(suggest.getDebugInfo());
-    if (root.has("errors")) {
-      JsonNode error = root.get("errors");
-      resp.setErrMsg(String.valueOf(error));
-      return resp;
-    }
-    for (JsonNode node : (ArrayNode) root.get("suggestions")) {
-      resp.addSuggestion(node.get("suggestion").asText());
+    resp.addErrors(parseErrors(root.get("errors")));
+    if (root.has("suggestions")) {
+      for (JsonNode node : root.get("suggestions")) {
+        resp.addSuggestion(node.get("suggestion").asText());
+      }
     }
     return resp;
   }

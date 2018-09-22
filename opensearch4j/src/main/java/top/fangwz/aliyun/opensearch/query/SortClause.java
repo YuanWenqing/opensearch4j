@@ -5,6 +5,7 @@ package top.fangwz.aliyun.opensearch.query;
 
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class SortClause implements ISearchClause {
       } else {
         sb.append(";");
       }
-      sb.append(entry.getValue().paramValue).append(entry.getKey());
+      sb.append(entry.getValue().directionChar).append(entry.getKey());
     }
     return sb;
   }
@@ -59,10 +60,11 @@ public class SortClause implements ISearchClause {
   }
 
   @AllArgsConstructor
+  @Getter
   public enum Direction {
     ASC("+"),
     DESC("-");
 
-    private final String paramValue;
+    private final String directionChar;
   }
 }

@@ -12,6 +12,7 @@ import top.fangwz.aliyun.opensearch.query.IQueryComponent;
 import top.fangwz.aliyun.opensearch.query.filter.IFilterCond;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -118,7 +119,7 @@ public class AggregateUnit implements IQueryComponent {
       aggregateDef.appendQueryParams(sb);
     }
     if (!range.isEmpty()) {
-      sb.append(",range:").append(StringUtils.join(range, "~"));
+      sb.append(",range:").append(getJoinedRange());
     }
     if (filter != null) {
       sb.append(",agg_filter:");
@@ -136,9 +137,15 @@ public class AggregateUnit implements IQueryComponent {
     return sb;
   }
 
-  @Override
-  public String toString() {
-    return appendQueryParams(new StringBuilder()).toString();
+  public String getJoinedFunction() {
+    List<String> funcs = this.aggregateDefs.stream()
+        .map(aggregateDef -> aggregateDef.appendQueryParams(new StringBuilder()).toString())
+        .collect(Collectors.toList());
+    return StringUtils.join(funcs, "#");
+  }
+
+  public String getJoinedRange() {
+    return StringUtils.join(range, "~");
   }
 
   @Getter
