@@ -1,7 +1,7 @@
 /**
  * @author yuanwq, date: 2017年9月15日
  */
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;

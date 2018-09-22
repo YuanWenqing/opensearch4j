@@ -1,11 +1,10 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.query.aggregate;
 
 import com.google.common.collect.Maps;
-import top.fangwz.aliyun.opensearch.ISearchClause;
-import top.fangwz.aliyun.opensearch.component.AggregateUnit;
+import top.fangwz.aliyun.opensearch.query.ISearchClause;
 
 import java.util.Collection;
 import java.util.Collections;

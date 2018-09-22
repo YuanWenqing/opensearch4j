@@ -7,7 +7,14 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import top.fangwz.aliyun.opensearch.clause.*;
+import top.fangwz.aliyun.opensearch.query.ConfigClause;
+import top.fangwz.aliyun.opensearch.query.KvPairsClause;
+import top.fangwz.aliyun.opensearch.query.Query;
+import top.fangwz.aliyun.opensearch.query.SortClause;
+import top.fangwz.aliyun.opensearch.query.aggregate.AggregateClause;
+import top.fangwz.aliyun.opensearch.query.distinct.DistinctClause;
+import top.fangwz.aliyun.opensearch.query.filter.FilterClause;
+import top.fangwz.aliyun.opensearch.query.query.QueryClause;
 
 import java.util.Collection;
 import java.util.Set;

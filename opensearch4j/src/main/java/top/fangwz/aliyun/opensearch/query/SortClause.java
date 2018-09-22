@@ -1,11 +1,10 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.query;
 
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
-import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import java.util.Collection;
 import java.util.Map;

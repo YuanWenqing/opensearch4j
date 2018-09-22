@@ -1,20 +1,19 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.query.query;
 
 import lombok.Getter;
-import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.ISearchClause;
+import top.fangwz.aliyun.opensearch.query.ISearchClause;
 
 /**
  * @author yuanwq
  */
 @Getter
-public class FilterClause implements ISearchClause {
-  private IFilterCond cond;
+public class QueryClause implements ISearchClause {
+  private IQueryCond cond;
 
-  public FilterClause setCond(IFilterCond cond) {
+  public QueryClause setCond(IQueryCond cond) {
     this.cond = cond;
     return this;
   }
@@ -25,11 +24,13 @@ public class FilterClause implements ISearchClause {
 
   @Override
   public StringBuilder appendQueryParams(StringBuilder sb) {
-    sb.append("filter=");
-    if (isEmpty()) {
-      return sb;
+    sb.append("query=");
+    if (cond == null) {
+      // 避免空query
+      sb.append("''");
+    } else {
+      cond.appendQueryParams(sb);
     }
-    cond.appendQueryParams(sb);
     return sb;
   }
 

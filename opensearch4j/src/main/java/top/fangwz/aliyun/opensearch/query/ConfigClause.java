@@ -1,11 +1,10 @@
 /**
  * @author yuanwq, date: 2017年9月12日
  */
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import static com.google.common.base.Preconditions.*;
 

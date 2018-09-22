@@ -1,17 +1,16 @@
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.filter;
 
 import lombok.Data;
-import top.fangwz.aliyun.opensearch.IQueryCond;
 
 /**
  * @author: yuanwq
  * @date: 2018/9/21
  */
 @Data
-public class LogicalQueryCond extends AbstractQueryCond {
-  private final IQueryCond left;
-  private final LogicalOp op;
-  private final IQueryCond right;
+public class LogicalFilterCond extends AbstractFilterCond {
+  private final IFilterCond left;
+  private final IFilterCond.LogicalOp op;
+  private final IFilterCond right;
 
   @Override
   public StringBuilder appendQueryParams(StringBuilder sb) {
@@ -34,7 +33,7 @@ public class LogicalQueryCond extends AbstractQueryCond {
   }
 
   @Override
-  public boolean priorTo(LogicalOp op) {
+  public boolean priorTo(IFilterCond.LogicalOp op) {
     // 为方便理解，故只有相同的操作符可以级联
     return this.op == op;
   }

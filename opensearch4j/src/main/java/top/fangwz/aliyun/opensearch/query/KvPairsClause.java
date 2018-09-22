@@ -1,7 +1,6 @@
-package top.fangwz.aliyun.opensearch.clause;
+package top.fangwz.aliyun.opensearch.query;
 
 import com.google.common.base.Joiner;
-import top.fangwz.aliyun.opensearch.ISearchClause;
 
 import java.util.LinkedHashMap;
 

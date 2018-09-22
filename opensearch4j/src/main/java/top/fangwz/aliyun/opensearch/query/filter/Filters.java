@@ -1,6 +1,4 @@
-package top.fangwz.aliyun.opensearch.component;
-
-import top.fangwz.aliyun.opensearch.IFilterCond;
+package top.fangwz.aliyun.opensearch.query.filter;
 
 import java.util.Collection;
 import java.util.Iterator;

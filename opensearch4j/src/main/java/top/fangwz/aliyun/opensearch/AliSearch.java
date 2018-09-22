@@ -11,9 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import top.fangwz.aliyun.opensearch.component.AggregateUnit;
-import top.fangwz.aliyun.opensearch.component.DistinctUnit;
-import top.fangwz.aliyun.opensearch.component.Facet;
+import top.fangwz.aliyun.opensearch.query.aggregate.AggregateUnit;
+import top.fangwz.aliyun.opensearch.query.distinct.DistinctUnit;
 
 import java.io.IOException;
 import java.util.Collections;

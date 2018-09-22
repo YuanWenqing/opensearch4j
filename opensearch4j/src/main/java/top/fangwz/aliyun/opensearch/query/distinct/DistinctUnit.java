@@ -1,12 +1,12 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.distinct;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.IQueryParamBuilder;
+import top.fangwz.aliyun.opensearch.query.IQueryComponent;
+import top.fangwz.aliyun.opensearch.query.filter.IFilterCond;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class DistinctUnit implements IQueryParamBuilder {
+public class DistinctUnit implements IQueryComponent {
 
   private final String key;
   private int times = 1;

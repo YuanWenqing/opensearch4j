@@ -1,15 +1,15 @@
 /**
  * @author yuanwq, date: 2017年9月13日
  */
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.aggregate;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.IQueryParamBuilder;
+import top.fangwz.aliyun.opensearch.query.IQueryComponent;
+import top.fangwz.aliyun.opensearch.query.filter.IFilterCond;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class AggregateUnit implements IQueryParamBuilder {
+public class AggregateUnit implements IQueryComponent {
   private final String groupKey;
   private final List<AggregateDef> aggregateDefs = Lists.newArrayList();
   private final SortedSet<Number> range =
@@ -38,30 +38,25 @@ public class AggregateUnit implements IQueryParamBuilder {
   }
 
   public AggregateUnit count() {
-    this.aggregateDefs.add(
-        new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.COUNT,
-            StringUtils.EMPTY));
+    this.aggregateDefs.add(new AggregateDef(AggregateFunction.COUNT, StringUtils.EMPTY));
     return this;
   }
 
   public AggregateUnit sum(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for sum must not blank");
-    this.aggregateDefs
-        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.SUM, field));
+    this.aggregateDefs.add(new AggregateDef(AggregateFunction.SUM, field));
     return this;
   }
 
   public AggregateUnit max(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for max must not blank");
-    this.aggregateDefs
-        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.MAX, field));
+    this.aggregateDefs.add(new AggregateDef(AggregateFunction.MAX, field));
     return this;
   }
 
   public AggregateUnit min(String field) {
     checkArgument(StringUtils.isNotBlank(field), "field for min must not blank");
-    this.aggregateDefs
-        .add(new AggregateDef(top.fangwz.aliyun.opensearch.component.AggregateFunction.MIN, field));
+    this.aggregateDefs.add(new AggregateDef(AggregateFunction.MIN, field));
     return this;
   }
 
@@ -148,8 +143,8 @@ public class AggregateUnit implements IQueryParamBuilder {
 
   @Getter
   @AllArgsConstructor
-  public static class AggregateDef implements IQueryParamBuilder {
-    private final top.fangwz.aliyun.opensearch.component.AggregateFunction function;
+  public static class AggregateDef implements IQueryComponent {
+    private final AggregateFunction function;
     /**
      * sum、max、min的内容支持基本的算术运算；
      */

@@ -1,4 +1,4 @@
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.aggregate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

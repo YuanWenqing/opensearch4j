@@ -1,6 +1,4 @@
-package top.fangwz.aliyun.opensearch.component;
-
-import top.fangwz.aliyun.opensearch.IQueryCond;
+package top.fangwz.aliyun.opensearch.query.query;
 
 /**
  * @author: yuanwq

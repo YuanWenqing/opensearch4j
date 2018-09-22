@@ -1,10 +1,12 @@
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.query.query;
+
+import top.fangwz.aliyun.opensearch.query.IQueryComponent;
 
 /**
  * @author: yuanwq
  * @date: 2018/4/19
  */
-public interface IQueryCond extends IQueryParamBuilder {
+public interface IQueryCond extends IQueryComponent {
 
   /**
    * 是否比逻辑运算 {@code op} 优先

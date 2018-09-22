@@ -7,7 +7,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
-import top.fangwz.aliyun.opensearch.component.Facet;
 
 import java.util.Collection;
 import java.util.List;

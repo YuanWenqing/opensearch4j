@@ -1,17 +1,16 @@
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.query;
 
 import lombok.Data;
-import top.fangwz.aliyun.opensearch.IFilterCond;
 
 /**
  * @author: yuanwq
  * @date: 2018/9/21
  */
 @Data
-public class LogicalFilterCond extends AbstractFilterCond {
-  private final IFilterCond left;
+public class LogicalQueryCond extends AbstractQueryCond {
+  private final IQueryCond left;
   private final LogicalOp op;
-  private final IFilterCond right;
+  private final IQueryCond right;
 
   @Override
   public StringBuilder appendQueryParams(StringBuilder sb) {

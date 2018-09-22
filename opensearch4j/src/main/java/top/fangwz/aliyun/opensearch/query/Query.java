@@ -1,7 +1,10 @@
-package top.fangwz.aliyun.opensearch;
+package top.fangwz.aliyun.opensearch.query;
 
 import lombok.Data;
-import top.fangwz.aliyun.opensearch.clause.*;
+import top.fangwz.aliyun.opensearch.query.aggregate.AggregateClause;
+import top.fangwz.aliyun.opensearch.query.distinct.DistinctClause;
+import top.fangwz.aliyun.opensearch.query.filter.FilterClause;
+import top.fangwz.aliyun.opensearch.query.query.QueryClause;
 
 /**
  * 搜索参数的抽象类：https://help.aliyun.com/document_detail/57155.html
@@ -10,7 +13,7 @@ import top.fangwz.aliyun.opensearch.clause.*;
  * @date: 2018/9/22
  */
 @Data
-public class Query implements IQueryParamBuilder {
+public class Query implements IQueryComponent {
   private static final QueryClause EMPTY_QUERY_CLAUSE = new QueryClause();
 
   /**

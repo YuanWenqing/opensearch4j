@@ -1,4 +1,4 @@
-package top.fangwz.aliyun.opensearch.component;
+package top.fangwz.aliyun.opensearch.query.filter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class RelationalFilterCond extends AbstractFilterCond {
   }
 
   @Override
-  public boolean priorTo(LogicalOp op) {
+  public boolean priorTo(IFilterCond.LogicalOp op) {
     return true;
   }
 
