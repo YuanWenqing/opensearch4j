@@ -8,4 +8,11 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public interface ItemParser<T> {
   T parse(JsonNode node);
+
+  static ItemParser<String> single(String field) {
+    return node -> {
+      JsonNode valueNode = node.get(field);
+      return valueNode == null ? null : valueNode.asText();
+    };
+  }
 }
