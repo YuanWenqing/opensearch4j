@@ -3,53 +3,28 @@
  */
 package top.fangwz.aliyun.opensearch;
 
-import com.google.common.base.MoreObjects;
+import lombok.Data;
 
 /**
  * @author yuanwq
  */
+@Data
 public class SuggestReq {
-  private final String appName;
-  private final String suggestName;
-
-  private int hit = 10;
-  private String query = "";
-
   /**
-   * @param suggestName 提示规则名称
+   * 搜索应用名
    */
-  public SuggestReq(String appName, String suggestName) {
-    this.appName = appName;
-    this.suggestName = suggestName;
-  }
+  private final String appName;
+  /**
+   * 提示规则名称
+   */
+  private final String suggestName;
+  /**
+   * 搜索关键词
+   */
+  private String query = "";
+  /**
+   * 下拉提示条数，默认10，范围[1,10]
+   */
+  private int hit = 10;
 
-  public int getHit() {
-    return hit;
-  }
-
-  public void setHit(int hit) {
-    this.hit = hit;
-  }
-
-  public String getQuery() {
-    return query;
-  }
-
-  public void setQuery(String query) {
-    this.query = query;
-  }
-
-  public String getAppName() {
-    return appName;
-  }
-
-  public String getSuggestName() {
-    return suggestName;
-  }
-
-  @Override
-  public String toString() {
-    return MoreObjects.toStringHelper(getClass()).add("app", appName).add("suggest", suggestName)
-        .add("query", query).add("hit", hit).toString();
-  }
 }

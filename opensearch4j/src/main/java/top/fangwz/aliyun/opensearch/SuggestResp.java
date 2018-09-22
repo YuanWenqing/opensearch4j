@@ -3,8 +3,8 @@
  */
 package top.fangwz.aliyun.opensearch;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
+import lombok.Data;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,12 +12,18 @@ import java.util.List;
 /**
  * @author yuanwq
  */
+@Data
 public class SuggestResp {
+  private String requestId;
+  /**
+   * 引擎查询耗时，单位为秒
+   */
+  private double searchTime;
   private final List<String> suggestions = Lists.newArrayList();
+  private final List<Error> errors = Lists.newArrayList();
+  private String debugInfo;
 
   private String rawResponse;
-  private String errMsg;
-  private String debugInfo;
 
   public void addSuggestion(String suggestion) {
     this.suggestions.add(suggestion);
@@ -27,46 +33,21 @@ public class SuggestResp {
     this.suggestions.addAll(suggestions);
   }
 
-  public List<String> getSuggestions() {
-    return suggestions;
-  }
-
-  public void setRawResponse(String rawResponse) {
-    this.rawResponse = rawResponse;
-  }
-
-  public String getRawResponse() {
-    return rawResponse;
-  }
-
   public boolean isError() {
-    return errMsg != null;
+    return errors.isEmpty();
   }
 
-  public void setErrMsg(String errMsg) {
-    this.errMsg = errMsg;
+  public void addErrors(Collection<Error> errors) {
+    this.errors.addAll(errors);
   }
 
-  public String getErrMsg() {
-    return errMsg;
-  }
-
-  public String getDebugInfo() {
-    return debugInfo;
-  }
-
-  public void setDebugInfo(String debugInfo) {
-    this.debugInfo = debugInfo;
-  }
-
-  @Override
-  public String toString() {
-    if (isError()) {
-      return MoreObjects.toStringHelper(getClass()).add("errMsg", errMsg).add("debug", debugInfo)
-          .toString();
+  public Error findError(int code) {
+    for (Error error : errors) {
+      if (error.getCode() == code) {
+        return error;
+      }
     }
-    return MoreObjects.toStringHelper(getClass()).add("suggestions", suggestions)
-        .add("debug", debugInfo).toString();
+    return null;
   }
 
 }

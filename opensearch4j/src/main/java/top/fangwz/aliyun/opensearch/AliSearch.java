@@ -63,13 +63,13 @@ public class AliSearch {
     return resp;
   }
 
-  private List<SearchResp.Error> parseErrors(JsonNode errorNode) {
+  private List<Error> parseErrors(JsonNode errorNode) {
     if (errorNode == null) {
       return Collections.emptyList();
     }
-    List<SearchResp.Error> errors = Lists.newArrayList();
+    List<Error> errors = Lists.newArrayList();
     for (JsonNode error : errorNode) {
-      errors.add(new SearchResp.Error(error.get("code").asInt(), error.get("message").asText()));
+      errors.add(new Error(error.get("code").asInt(), error.get("message").asText()));
     }
     return errors;
   }

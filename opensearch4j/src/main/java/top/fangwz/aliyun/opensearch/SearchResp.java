@@ -115,13 +115,6 @@ public class SearchResp<T> {
   }
 
   @Data
-  public static class Error {
-    private final int code;
-    private final String message;
-
-  }
-
-  @Data
   public static class ComputeCost {
     private final String indexName;
     private final double cost;
