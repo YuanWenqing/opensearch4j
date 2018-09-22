@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.ISearchParamsBuilder;
+import top.fangwz.aliyun.opensearch.IQueryParamBuilder;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class AggregateUnit implements ISearchParamsBuilder {
+public class AggregateUnit implements IQueryParamBuilder {
   private final String groupKey;
   private final List<AggregateDef> aggregateDefs = Lists.newArrayList();
   private final SortedSet<Number> range =
@@ -111,7 +111,7 @@ public class AggregateUnit implements ISearchParamsBuilder {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("group_key:").append(groupKey).append(",agg_fun:");
     boolean first = true;
     for (AggregateDef aggregateDef : aggregateDefs) {
@@ -120,14 +120,14 @@ public class AggregateUnit implements ISearchParamsBuilder {
       } else {
         sb.append("#");
       }
-      aggregateDef.appendSearchParams(sb);
+      aggregateDef.appendQueryParams(sb);
     }
     if (!range.isEmpty()) {
       sb.append(",range:").append(StringUtils.join(range, "~"));
     }
     if (filter != null) {
       sb.append(",agg_filter:");
-      filter.appendSearchParams(sb);
+      filter.appendQueryParams(sb);
     }
     if (samplerThreshold > 0) {
       sb.append(",agg_sampler_threshold:").append(samplerThreshold);
@@ -143,12 +143,12 @@ public class AggregateUnit implements ISearchParamsBuilder {
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
   @Getter
   @AllArgsConstructor
-  public static class AggregateDef implements ISearchParamsBuilder {
+  public static class AggregateDef implements IQueryParamBuilder {
     private final top.fangwz.aliyun.opensearch.component.AggregateFunction function;
     /**
      * sum、max、min的内容支持基本的算术运算；
@@ -156,7 +156,7 @@ public class AggregateUnit implements ISearchParamsBuilder {
     private final String expression;
 
     @Override
-    public StringBuilder appendSearchParams(StringBuilder sb) {
+    public StringBuilder appendQueryParams(StringBuilder sb) {
       sb.append(function.getFunctionName()).append("(").append(expression).append(")");
       return sb;
     }

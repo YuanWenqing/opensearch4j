@@ -14,20 +14,20 @@ public class LogicalFilterCond extends AbstractFilterCond {
   private final IFilterCond right;
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     if (left.priorTo(op)) {
-      left.appendSearchParams(sb);
+      left.appendQueryParams(sb);
     } else {
       sb.append("(");
-      left.appendSearchParams(sb);
+      left.appendQueryParams(sb);
       sb.append(")");
     }
     sb.append(" ").append(op.name().toUpperCase()).append(" ");
     if (right.priorTo(op)) {
-      right.appendSearchParams(sb);
+      right.appendQueryParams(sb);
     } else {
       sb.append("(");
-      right.appendSearchParams(sb);
+      right.appendQueryParams(sb);
       sb.append(")");
     }
     return sb;

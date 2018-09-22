@@ -6,7 +6,7 @@ package top.fangwz.aliyun.opensearch.component;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.IFilterCond;
-import top.fangwz.aliyun.opensearch.ISearchParamsBuilder;
+import top.fangwz.aliyun.opensearch.IQueryParamBuilder;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.*;
  * @author yuanwq
  */
 @Getter
-public class DistinctUnit implements ISearchParamsBuilder {
+public class DistinctUnit implements IQueryParamBuilder {
 
   private final String key;
   private int times = 1;
@@ -72,7 +72,7 @@ public class DistinctUnit implements ISearchParamsBuilder {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("dist_key:").append(key);
     sb.append(",dist_count:").append(count);
     sb.append(",dist_times:").append(times);
@@ -80,13 +80,13 @@ public class DistinctUnit implements ISearchParamsBuilder {
     sb.append(",update_total_hit:").append(updateTotalHit);
     if (filter != null) {
       sb.append(",dist_filter:");
-      filter.appendSearchParams(sb);
+      filter.appendQueryParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 }

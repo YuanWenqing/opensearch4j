@@ -67,7 +67,7 @@ public class IndexQuery extends AbstractQueryCond {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     if (StringUtils.isNotBlank(index)) {
       sb.append(index).append(":");
     }

@@ -69,7 +69,7 @@ public class ConfigClause implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("config=");
     sb.append("start:").append(start);
     sb.append(",hit:").append(hit);
@@ -80,7 +80,7 @@ public class ConfigClause implements ISearchClause {
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
   @AllArgsConstructor

@@ -14,10 +14,10 @@ public class RelationalFilterCond extends AbstractFilterCond {
   private final IExpression right;
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
-    left.appendSearchParams(sb);
+  public StringBuilder appendQueryParams(StringBuilder sb) {
+    left.appendQueryParams(sb);
     sb.append(op.paramValue);
-    right.appendSearchParams(sb);
+    right.appendQueryParams(sb);
     return sb;
   }
 

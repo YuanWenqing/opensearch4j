@@ -100,35 +100,35 @@ public class SearchReq implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     if (query == null) {
-      EMPTY_QUERY.appendSearchParams(sb);
+      EMPTY_QUERY.appendQueryParams(sb);
     } else {
-      query.appendSearchParams(sb);
+      query.appendQueryParams(sb);
     }
     if (config != null) {
       sb.append("&&");
-      config.appendSearchParams(sb);
+      config.appendQueryParams(sb);
     }
     if (filter != null && !filter.isEmpty()) {
       sb.append("&&");
-      filter.appendSearchParams(sb);
+      filter.appendQueryParams(sb);
     }
     if (sort != null && !sort.isEmpty()) {
       sb.append("&&");
-      sort.appendSearchParams(sb);
+      sort.appendQueryParams(sb);
     }
     if (aggregate != null && !aggregate.isEmpty()) {
       sb.append("&&");
-      aggregate.appendSearchParams(sb);
+      aggregate.appendQueryParams(sb);
     }
     if (distinct != null && !distinct.isEmpty()) {
       sb.append("&&");
-      distinct.appendSearchParams(sb);
+      distinct.appendQueryParams(sb);
     }
     if (kvpairs != null && !kvpairs.isEmpty()) {
       sb.append("&&");
-      kvpairs.appendSearchParams(sb);
+      kvpairs.appendQueryParams(sb);
     }
     return sb;
   }
@@ -136,7 +136,7 @@ public class SearchReq implements ISearchClause {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(getClass()).add("app", appName)
-        .add("query", appendSearchParams(new StringBuilder()).toString()).add("fetch", fetchFields)
+        .add("query", appendQueryParams(new StringBuilder()).toString()).add("fetch", fetchFields)
         .add("firstRankFormula", firstRankFormula).add("secondRankFormula", secondRankFormula)
         .add("qp", qps).toString();
   }

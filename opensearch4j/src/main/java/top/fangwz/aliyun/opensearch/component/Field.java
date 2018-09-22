@@ -19,7 +19,7 @@ public class Field implements IExpression {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append(field);
     return sb;
   }

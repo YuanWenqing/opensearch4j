@@ -40,7 +40,7 @@ public class AliSearch {
     SearchResp<T> resp = new SearchResp<>();
     resp.setRawResponse(respText);
     resp.setDebugInfo(search.getDebugInfo());
-    resp.setQuery(req.appendSearchParams(new StringBuilder()).toString());
+    resp.setQuery(req.appendQueryParams(new StringBuilder()).toString());
     resp.setStatus(root.get("status").asText());
     resp.setRequestId(root.get("request_id").asText());
     resp.addErrors(parseErrors(root.get("errors")));

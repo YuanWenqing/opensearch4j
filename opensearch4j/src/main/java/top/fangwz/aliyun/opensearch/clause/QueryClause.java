@@ -24,20 +24,20 @@ public class QueryClause implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("query=");
     if (cond == null) {
       // 避免空query
       sb.append("''");
     } else {
-      cond.appendSearchParams(sb);
+      cond.appendQueryParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
 }

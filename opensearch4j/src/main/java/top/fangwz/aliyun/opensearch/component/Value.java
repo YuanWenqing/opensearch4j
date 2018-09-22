@@ -19,7 +19,7 @@ public class Value implements IExpression {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     if (value instanceof Number) {
       sb.append(value);
     } else {

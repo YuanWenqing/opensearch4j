@@ -9,6 +9,6 @@ package top.fangwz.aliyun.opensearch;
  * @author yuanwq
  * @see {@literal https://help.aliyun.com/document_detail/29140.html}
  */
-public interface ISearchClause extends ISearchParamsBuilder {
+public interface ISearchClause extends IQueryParamBuilder {
 
 }

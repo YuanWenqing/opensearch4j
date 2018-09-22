@@ -37,7 +37,7 @@ public class SortClause implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("sort=");
     if (isEmpty()) {
       return sb;
@@ -56,7 +56,7 @@ public class SortClause implements ISearchClause {
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
   @AllArgsConstructor

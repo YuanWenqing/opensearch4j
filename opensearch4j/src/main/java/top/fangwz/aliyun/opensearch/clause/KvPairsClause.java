@@ -14,14 +14,14 @@ public class KvPairsClause extends LinkedHashMap<String, String> implements ISea
       Joiner.on(",").withKeyValueSeparator(":").useForNull("");
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("kvpairs=").append(pairString());
     return sb;
   }
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
   public String pairString() {

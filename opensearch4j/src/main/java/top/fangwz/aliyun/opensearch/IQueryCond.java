@@ -4,7 +4,7 @@ package top.fangwz.aliyun.opensearch;
  * @author: yuanwq
  * @date: 2018/4/19
  */
-public interface IQueryCond extends ISearchParamsBuilder {
+public interface IQueryCond extends IQueryParamBuilder {
 
   /**
    * 是否比逻辑运算 {@code op} 优先

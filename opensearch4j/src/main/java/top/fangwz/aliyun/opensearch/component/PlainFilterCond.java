@@ -24,7 +24,7 @@ public class PlainFilterCond extends AbstractFilterCond {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append(plainCond);
     return sb;
   }

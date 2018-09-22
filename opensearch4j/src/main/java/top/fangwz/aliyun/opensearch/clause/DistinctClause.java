@@ -34,7 +34,7 @@ public class DistinctClause implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("distinct=");
     if (isEmpty()) return sb;
     boolean first = true;
@@ -44,13 +44,13 @@ public class DistinctClause implements ISearchClause {
       } else {
         sb.append(";");
       }
-      distinct.appendSearchParams(sb);
+      distinct.appendQueryParams(sb);
     }
     return sb;
   }
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 }

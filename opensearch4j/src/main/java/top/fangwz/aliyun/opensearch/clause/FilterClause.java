@@ -24,18 +24,18 @@ public class FilterClause implements ISearchClause {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append("filter=");
     if (isEmpty()) {
       return sb;
     }
-    cond.appendSearchParams(sb);
+    cond.appendQueryParams(sb);
     return sb;
   }
 
   @Override
   public String toString() {
-    return appendSearchParams(new StringBuilder()).toString();
+    return appendQueryParams(new StringBuilder()).toString();
   }
 
 }

@@ -19,7 +19,7 @@ public class PlainExpr implements IExpression {
   }
 
   @Override
-  public StringBuilder appendSearchParams(StringBuilder sb) {
+  public StringBuilder appendQueryParams(StringBuilder sb) {
     sb.append(expression);
     return sb;
   }
