@@ -3,22 +3,24 @@
  */
 package top.fangwz.aliyun.opensearch;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import top.fangwz.aliyun.opensearch.clause.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author yuanwq
  */
-public class SearchReq<T> implements ISearchClause {
+@Data
+public class SearchReq implements ISearchClause {
+  private static final QueryClause EMPTY_QUERY = new QueryClause();
+
   private final String appName;
-  private final Function<JsonNode, T> translator;
 
   private QueryClause query;
   private ConfigClause config;
@@ -28,22 +30,22 @@ public class SearchReq<T> implements ISearchClause {
   private DistinctClause distinct;
   private KvPairsClause kvpairs;
 
-  private String formulaName;
-  private String firstFormulaName;
-  private List<String> qps = Lists.newArrayList();
-  private List<String> fetchFields = Lists.newArrayList();
+  /**
+   * 粗排表达式名称
+   */
+  private String firstRankFormula;
+  /**
+   * 精排表达式名称
+   */
+  private String secondRankFormula;
+  /**
+   * 查询分析规则名称
+   */
+  private final Set<String> qps = Sets.newLinkedHashSet();
+  private final Set<String> fetchFields = Sets.newLinkedHashSet();
 
-  public SearchReq(String appName, Function<JsonNode, T> translator) {
+  public SearchReq(String appName) {
     this.appName = appName;
-    this.translator = translator;
-  }
-
-  public String getAppName() {
-    return appName;
-  }
-
-  public Function<JsonNode, T> getTranslator() {
-    return translator;
   }
 
   public QueryClause createQuery() {
@@ -51,26 +53,9 @@ public class SearchReq<T> implements ISearchClause {
     return this.query;
   }
 
-  public QueryClause getQuery() {
-    return query;
-  }
-
-  public void setQuery(QueryClause query) {
-    Preconditions.checkNotNull(query);
-    this.query = query;
-  }
-
   public ConfigClause createConfig() {
     this.config = new ConfigClause();
     return this.config;
-  }
-
-  public ConfigClause getConfig() {
-    return config;
-  }
-
-  public void setConfig(ConfigClause config) {
-    this.config = config;
   }
 
   public FilterClause createFilter() {
@@ -78,25 +63,9 @@ public class SearchReq<T> implements ISearchClause {
     return this.filter;
   }
 
-  public FilterClause getFilter() {
-    return filter;
-  }
-
-  public void setFilter(FilterClause filter) {
-    this.filter = filter;
-  }
-
   public SortClause createSort() {
     this.sort = new SortClause();
     return this.sort;
-  }
-
-  public SortClause getSort() {
-    return sort;
-  }
-
-  public void setSort(SortClause sort) {
-    this.sort = sort;
   }
 
   public AggregateClause createAggregate() {
@@ -104,64 +73,14 @@ public class SearchReq<T> implements ISearchClause {
     return this.aggregate;
   }
 
-  public AggregateClause getAggregate() {
-    return aggregate;
-  }
-
-  public void setAggregate(AggregateClause aggregate) {
-    this.aggregate = aggregate;
-  }
-
   public DistinctClause createDistinct() {
     this.distinct = new DistinctClause();
     return this.distinct;
   }
 
-  public DistinctClause getDistinct() {
-    return distinct;
-  }
-
-  public void setDistinct(DistinctClause distinct) {
-    this.distinct = distinct;
-  }
-
   public KvPairsClause createKvpairs() {
     this.kvpairs = new KvPairsClause();
     return this.kvpairs;
-  }
-
-  public KvPairsClause getKvpairs() {
-    return kvpairs;
-  }
-
-  public void setKvpairs(KvPairsClause kvpairs) {
-    this.kvpairs = kvpairs;
-  }
-
-  public String getFormulaName() {
-    return formulaName;
-  }
-
-  /**
-   * 精排表达式名称
-   */
-  public void setFormulaName(String formulaName) {
-    this.formulaName = formulaName;
-  }
-
-  public String getFirstFormulaName() {
-    return firstFormulaName;
-  }
-
-  /**
-   * 粗排表达式名称
-   */
-  public void setFirstFormulaName(String firstFormulaName) {
-    this.firstFormulaName = firstFormulaName;
-  }
-
-  public List<String> getQps() {
-    return qps;
   }
 
   /**
@@ -172,11 +91,7 @@ public class SearchReq<T> implements ISearchClause {
     qps.add(qp);
   }
 
-  public List<String> getFetchFields() {
-    return fetchFields;
-  }
-
-  public void addFetchFields(List<String> fetchFields) {
+  public void addFetchFields(Collection<String> fetchFields) {
     this.fetchFields.addAll(fetchFields);
   }
 
@@ -186,7 +101,11 @@ public class SearchReq<T> implements ISearchClause {
 
   @Override
   public StringBuilder appendSearchParams(StringBuilder sb) {
-    query.appendSearchParams(sb);
+    if (query == null) {
+      EMPTY_QUERY.appendSearchParams(sb);
+    } else {
+      query.appendSearchParams(sb);
+    }
     if (config != null) {
       sb.append("&&");
       config.appendSearchParams(sb);
@@ -218,8 +137,8 @@ public class SearchReq<T> implements ISearchClause {
   public String toString() {
     return MoreObjects.toStringHelper(getClass()).add("app", appName)
         .add("query", appendSearchParams(new StringBuilder()).toString()).add("fetch", fetchFields)
-        .add("formulaName", formulaName).add("firstFormulaName", firstFormulaName).add("qp", qps)
-        .toString();
+        .add("firstRankFormula", firstRankFormula).add("secondRankFormula", secondRankFormula)
+        .add("qp", qps).toString();
   }
 
 }
