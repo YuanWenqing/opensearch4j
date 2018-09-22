@@ -4,7 +4,6 @@
 package top.fangwz.aliyun.opensearch;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -13,23 +12,22 @@ import top.fangwz.aliyun.opensearch.clause.*;
 import java.util.Collection;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * @author yuanwq
  */
 @Data
-public class SearchReq implements ISearchClause {
-  private static final QueryClause EMPTY_QUERY = new QueryClause();
+public class SearchReq {
 
+  /**
+   * 搜索应用名
+   */
   private final String appName;
-
-  private QueryClause query;
-  private ConfigClause config;
-  private FilterClause filter;
-  private SortClause sort;
-  private AggregateClause aggregate;
-  private DistinctClause distinct;
-  private KvPairsClause kvpairs;
-
+  /**
+   * query参数（非query子句）：不能为空，查询的主体，可以通过若干子句的组合来实现多样的搜索需求
+   */
+  private final Query query = new Query();
   /**
    * 粗排表达式名称
    */
@@ -42,52 +40,56 @@ public class SearchReq implements ISearchClause {
    * 查询分析规则名称
    */
   private final Set<String> qps = Sets.newLinkedHashSet();
+  /**
+   * 可展示的字段，对查询性能影响较大，建议只获取需要的字段
+   */
   private final Set<String> fetchFields = Sets.newLinkedHashSet();
 
   public SearchReq(String appName) {
+    checkArgument(StringUtils.isNotBlank(appName), "app name must not blank");
     this.appName = appName;
   }
 
   public QueryClause createQuery() {
-    this.query = new QueryClause();
-    return this.query;
+    this.query.setQuery(new QueryClause());
+    return this.query.getQuery();
   }
 
   public ConfigClause createConfig() {
-    this.config = new ConfigClause();
-    return this.config;
+    this.query.setConfig(new ConfigClause());
+    return this.query.getConfig();
   }
 
   public FilterClause createFilter() {
-    this.filter = new FilterClause();
-    return this.filter;
+    this.query.setFilter(new FilterClause());
+    return this.query.getFilter();
   }
 
   public SortClause createSort() {
-    this.sort = new SortClause();
-    return this.sort;
+    this.query.setSort(new SortClause());
+    return this.query.getSort();
   }
 
   public AggregateClause createAggregate() {
-    this.aggregate = new AggregateClause();
-    return this.aggregate;
+    this.query.setAggregate(new AggregateClause());
+    return this.query.getAggregate();
   }
 
   public DistinctClause createDistinct() {
-    this.distinct = new DistinctClause();
-    return this.distinct;
+    this.query.setDistinct(new DistinctClause());
+    return this.query.getDistinct();
   }
 
   public KvPairsClause createKvpairs() {
-    this.kvpairs = new KvPairsClause();
-    return this.kvpairs;
+    this.query.setKvpairs(new KvPairsClause());
+    return this.query.getKvpairs();
   }
 
   /**
    * 查询分析规则名称
    */
   public void addQp(String qp) {
-    Preconditions.checkArgument(StringUtils.isNotBlank(qp));
+    checkArgument(StringUtils.isNotBlank(qp));
     qps.add(qp);
   }
 
@@ -96,49 +98,16 @@ public class SearchReq implements ISearchClause {
   }
 
   public void addFetchField(String fetchField) {
+    checkArgument(StringUtils.isNotBlank(fetchField));
     this.fetchFields.add(fetchField);
-  }
-
-  @Override
-  public StringBuilder appendQueryParams(StringBuilder sb) {
-    if (query == null) {
-      EMPTY_QUERY.appendQueryParams(sb);
-    } else {
-      query.appendQueryParams(sb);
-    }
-    if (config != null) {
-      sb.append("&&");
-      config.appendQueryParams(sb);
-    }
-    if (filter != null && !filter.isEmpty()) {
-      sb.append("&&");
-      filter.appendQueryParams(sb);
-    }
-    if (sort != null && !sort.isEmpty()) {
-      sb.append("&&");
-      sort.appendQueryParams(sb);
-    }
-    if (aggregate != null && !aggregate.isEmpty()) {
-      sb.append("&&");
-      aggregate.appendQueryParams(sb);
-    }
-    if (distinct != null && !distinct.isEmpty()) {
-      sb.append("&&");
-      distinct.appendQueryParams(sb);
-    }
-    if (kvpairs != null && !kvpairs.isEmpty()) {
-      sb.append("&&");
-      kvpairs.appendQueryParams(sb);
-    }
-    return sb;
   }
 
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(getClass()).add("app", appName)
-        .add("query", appendQueryParams(new StringBuilder()).toString()).add("fetch", fetchFields)
-        .add("firstRankFormula", firstRankFormula).add("secondRankFormula", secondRankFormula)
-        .add("qp", qps).toString();
+        .add("query", query.appendQueryParams(new StringBuilder()).toString())
+        .add("fetch", fetchFields).add("firstRank", firstRankFormula)
+        .add("secondRank", secondRankFormula).add("qp", qps).toString();
   }
 
 }
