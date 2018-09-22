@@ -6,101 +6,33 @@ package top.fangwz.aliyun.opensearch;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.Data;
 import top.fangwz.aliyun.opensearch.component.Facet;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author yuanwq
  */
+@Data
 public class SearchResp<T> {
-  private final List<T> values = Lists.newArrayList();
-  private int total = -1;
-  private String query;
-  private Map<String, Facet> facetMap = Maps.newLinkedHashMap();
 
-  private String rawResponse;
-  private String status;
+  private Status status;
   private String requestId;
-  private List<Error> errors = Lists.newArrayList();
-  private List<ComputeCost> computeCosts = Lists.newArrayList();
+  private Result<T> result;
+  private final List<Error> errors = Lists.newArrayList();
   private String debugInfo;
-
-  public void addValue(T value) {
-    values.add(value);
-  }
-
-  public void setTotal(int total) {
-    this.total = total;
-  }
-
-  public int getTotal() {
-    return total;
-  }
-
-  public List<T> getValues() {
-    return values;
-  }
 
   /**
    * SearchReq的文本
    */
-  public void setQuery(String query) {
-    this.query = query;
-  }
+  private String query;
+  private String rawResponse;
 
-  public String getQuery() {
-    return query;
-  }
-
-  public void addFacet(Facet facet) {
-    facetMap.put(facet.getGroupKey(), facet);
-  }
-
-  public Map<String, Facet> getFacetMap() {
-    return Collections.unmodifiableMap(facetMap);
-  }
-
-  public Facet getFacet(String groupKey) {
-    return facetMap.get(groupKey);
-  }
-
-  public void setRawResponse(String rawResponse) {
-    this.rawResponse = rawResponse;
-  }
-
-  public String getRawResponse() {
-    return rawResponse;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  public String getRequestId() {
-    return requestId;
-  }
-
-  public boolean isError() {
-    return !status.equalsIgnoreCase("OK") || !errors.isEmpty();
-  }
-
-  public void addErrors(List<Error> errors) {
+  public void addErrors(Collection<Error> errors) {
     this.errors.addAll(errors);
-  }
-
-  public List<Error> getErrors() {
-    return errors;
   }
 
   public Error findError(int code) {
@@ -112,96 +44,88 @@ public class SearchResp<T> {
     return null;
   }
 
-  @Deprecated
-  public String getErrMsg() {
-    return String.valueOf(errors);
-  }
-
-  public void addComputeCosts(List<ComputeCost> computeCosts) {
-    this.computeCosts.addAll(computeCosts);
-  }
-
-  public List<ComputeCost> getComputeCosts() {
-    return computeCosts;
-  }
-
-  public ComputeCost findComputeCost(String indexName) {
-    for (ComputeCost computeCost : computeCosts) {
-      if (indexName.equals(computeCost.getIndexName())) {
-        return computeCost;
-      }
-    }
-    return null;
-  }
-
-  public String getDebugInfo() {
-    return debugInfo;
-  }
-
-  public void setDebugInfo(String debugInfo) {
-    this.debugInfo = debugInfo;
-  }
-
   @Override
   public String toString() {
     return toString(false);
   }
 
-  public String toString(boolean withData) {
+  public String toString(boolean withDetails) {
     MoreObjects.ToStringHelper helper =
         MoreObjects.toStringHelper(getClass()).add("status", status).add("requestId", requestId)
-            .add("query", "`" + query + "`").add("errors", errors).add("computeCost", computeCosts)
-            .add("total", total);
-    if (withData) {
-      helper.add("values", values).add("facet", facetMap);
+            .add("query", "`" + query + "`").add("errors", errors);
+    if (result != null) {
+      helper.add("result", result.toString(withDetails));
     }
     helper.add("debug", debugInfo);
     return helper.toString();
   }
 
+  public enum Status {
+    OK,
+    FAIL
+  }
+
+  @Data
+  public static class Result<T> {
+    /**
+     * 引擎耗时，单位秒
+     */
+    private double searchTime;
+    private int total;
+    private int num;
+    private int viewTotal;
+    private final List<ComputeCost> computeCosts = Lists.newArrayList();
+    private final List<T> items = Lists.newArrayList();
+    private final Map<String, Facet> facetMap = Maps.newLinkedHashMap();
+
+    public void addComputeCosts(Collection<ComputeCost> computeCosts) {
+      this.computeCosts.addAll(computeCosts);
+    }
+
+    public ComputeCost findComputeCost(String indexName) {
+      for (ComputeCost computeCost : computeCosts) {
+        if (indexName.equals(computeCost.getIndexName())) {
+          return computeCost;
+        }
+      }
+      return null;
+    }
+
+    public void addItem(T item) {
+      items.add(item);
+    }
+
+    public void addFacet(Facet facet) {
+      facetMap.put(facet.getGroupKey(), facet);
+    }
+
+    public Facet getFacet(String groupKey) {
+      return facetMap.get(groupKey);
+    }
+
+    @Override
+    public String toString() {
+      return toString(false);
+    }
+
+    public String toString(boolean withDetails) {
+      return "Result{" + "searchTime=" + searchTime + ", total=" + total + ", num=" + num +
+          ", viewTotal=" + viewTotal + ", computeCosts=" + computeCosts +
+          (withDetails ? ", items=" + items + ", facetMap=" + facetMap : "") + '}';
+    }
+  }
+
+  @Data
   public static class Error {
     private final int code;
     private final String message;
 
-    public Error(int code, String message) {
-      this.code = code;
-      this.message = message;
-    }
-
-    public int getCode() {
-      return code;
-    }
-
-    public String getMessage() {
-      return message;
-    }
-
-    @Override
-    public String toString() {
-      return "Errors{" + "code=" + code + ", message='" + message + '\'' + '}';
-    }
   }
 
+  @Data
   public static class ComputeCost {
     private final String indexName;
     private final double cost;
 
-    public ComputeCost(String indexName, double cost) {
-      this.indexName = indexName;
-      this.cost = cost;
-    }
-
-    public double getCost() {
-      return cost;
-    }
-
-    public String getIndexName() {
-      return indexName;
-    }
-
-    @Override
-    public String toString() {
-      return "ComputeCost{" + "indexName='" + indexName + '\'' + ", cost=" + cost + '}';
-    }
   }
 }
