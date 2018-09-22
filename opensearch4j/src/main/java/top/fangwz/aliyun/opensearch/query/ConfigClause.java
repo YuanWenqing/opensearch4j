@@ -28,9 +28,9 @@ public class ConfigClause implements ISearchClause {
    */
   private int hit = 10;
   /**
-   * 返回结果格式，默认为 {@link Format#JSON}
+   * 返回结果格式，仅支持 {@link Format#JSON}
    */
-  private Format format = Format.JSON;
+  private final Format format = Format.JSON;
   /**
    * 参与精排（second rank）个数，默认200，范围[0,2000]
    */
@@ -56,10 +56,10 @@ public class ConfigClause implements ISearchClause {
     return this;
   }
 
-  public ConfigClause setFormat(Format format) {
-    this.format = format;
-    return this;
-  }
+//  public ConfigClause setFormat(Format format) {
+//    this.format = format;
+//    return this;
+//  }
 
   public ConfigClause setRerankSize(int rerankSize) {
     checkArgument(rerankSize >= 0 && rerankSize <= 2000, "rerank_size in [0, 2000]: " + rerankSize);
@@ -84,9 +84,9 @@ public class ConfigClause implements ISearchClause {
 
   @AllArgsConstructor
   public enum Format {
-    JSON("json"),
-    FULL_JSON("fulljson"),
-    XML("xml");
+    JSON("json");
+//    FULL_JSON("fulljson"),
+//    XML("xml");
 
     private final String paramValue;
   }
