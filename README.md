@@ -1,6 +1,5 @@
-# aliyun-support
+# opensearch4j
 
-## opensearch4j
 对阿里云OpenSearch的二次封装，便于构造查询，尤其是其中的query子句与Filter子句的构造
 
 限制：
