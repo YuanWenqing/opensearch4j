@@ -1,53 +1,40 @@
 buildscript {
     repositories {
         mavenLocal()
-        maven {
-            name "nexus"
-            url "https://nexus.ilovelook.cn/repository/maven-public/"
-            credentials {
-                username property("nexus.username")
-                password property("nexus.password")
-            }
-        }
+        mavenCentral()
     }
-}
-
-ext {
-    springBootVersion = '2.0.3.RELEASE'
-    springVersion = '5.0.7.RELEASE'
 }
 
 // project setting
 subprojects {
-    group = "top.fangwz.aliyun"
-    version = "0.1.0"
+    group = "xyz.codemeans.aliyun4j"
 
     repositories {
         mavenLocal()
-        maven {
-            name "nexus"
-            url "https://nexus.ilovelook.cn/repository/maven-public/"
-            credentials {
-                username property("nexus.username")
-                password property("nexus.password")
-            }
-        }
+        mavenCentral()
     }
 
     apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "jacoco"
 
+    // artifacts
     jar << {
-        // println jar.archivePath
+        println "jar: ${archivePath}"
     }
-    task('sourcesJar', type: Jar, dependsOn: classes) {
+    task sourcesJar(type: Jar, dependsOn: classes) {
         from sourceSets.main.allJava
         classifier = 'sources'
+        doLast {
+            println "sources: ${archivePath}"
+        }
     }
-    task('javadocJar', type: Jar, dependsOn: javadoc) {
+    task javadocJar(type: Jar, dependsOn: javadoc) {
         classifier = 'javadoc'
         from javadoc.destinationDir
+        doLast {
+            println "sources: ${archivePath}"
+        }
     }
 
     jacocoTestReport.dependsOn(test)
@@ -60,39 +47,91 @@ subprojects {
     }
 
     apply plugin: "maven-publish"
-    afterEvaluate {
-        publishing.publications {
+    publishing {
+        repositories {
+            maven {
+                name "oss"
+                def ossSnapshotRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                def ossStagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                url = project.hasProperty("release") ? ossStagingRepoUrl : ossSnapshotRepoUrl
+                credentials {
+                    username property("maven2.username")
+                    password property("maven2.password")
+                }
+            }
+        }
+        publications {
             mavenJava(MavenPublication) {
                 from components.java
-                artifactId project.archivesBaseName
-                version project.version
+
+                if (project.hasProperty("release")) {
+                    version = project.getVersion()
+                } else {
+                    version = project.getVersion() + "-SNAPSHOT"
+                }
 
                 artifact sourcesJar
+                artifact javadocJar
+
+                pom {
+                    name = 'Aliyun4J'
+                    url = 'https://github.com/YuanWenqing/aliyun4j'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'yuanwq'
+                            name = 'YuanWenqing'
+                            email = 'ywq8876@163.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com:YuanWenqing/aliyun4j.git'
+                        developerConnection = 'scm:git:ssh://github.com:YuanWenqing/aliyun4j.git'
+                        url = 'https://github.com/YuanWenqing/aliyun4j'
+                    }
+                }
             }
         }
-        publishToMavenLocal {
-            doLast {
-                def pub = publishing.publications.mavenJava
-                println "artifact: ${pub.groupId}:${pub.artifactId}:${pub.version}"
+    }
+    publish {
+        doLast {
+            def pub = publishing.publications.mavenJava
+            println "artifact: ${pub.groupId}:${pub.artifactId}:${pub.version}"
+            for (repo in publishing.repositories) {
+                println "upload to ${repo.url}"
             }
         }
-        task local {
-            dependsOn publishToMavenLocal
+    }
+    publishToMavenLocal {
+        doLast {
+            def pub = publishing.publications.mavenJava
+            println "artifact: ${pub.groupId}:${pub.artifactId}:${pub.version}"
         }
+    }
+    task('local').dependsOn(publishToMavenLocal)
+
+    apply plugin: "signing"  // generate a signature file for each artifact
+    signing {
+        sign publishing.publications.mavenJava
     }
 
 
     dependencies {
-        //annotationProcessor("org.projectlombok:lombok:1.18.2")
-        compileOnly("org.projectlombok:lombok:1.18.2")
+        //annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+        compileOnly("org.projectlombok:lombok:$lombokVersion")
 
         // log
-        compile('org.slf4j:slf4j-api:1.7.7')
+        api("org.slf4j:slf4j-api:$slf4jVersion")
 
         // test
-        testImplementation('junit:junit:4.12')
-        testImplementation('org.slf4j:slf4j-log4j12:1.7.7')
-        testImplementation('log4j:log4j:1.2.17')
+        testImplementation("junit:junit:$junitVersion")
+        testImplementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
+        testImplementation("log4j:log4j:$log4jVersion")
     }
 }
 

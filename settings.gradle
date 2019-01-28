@@ -1,4 +1,4 @@
-rootProject.name="aliyun-support"
+rootProject.name = "aliyun4j"
 
 include 'opensearch4j'
 
