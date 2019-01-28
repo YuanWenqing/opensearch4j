@@ -1,4 +1,2 @@
-rootProject.name = "aliyun4j"
-
-include 'opensearch4j'
+rootProject.name = "opensearch4j"
 
