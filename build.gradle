@@ -97,6 +97,7 @@ publishing {
 
             pom {
                 name = "Opensearch4j: A Easy-Used Facility Library For Aliyun Opensearch"
+                description = "Java SDK for Aliyun Opensearch library with secondary wrapping, more EASY to use!"
                 url = 'https://github.com/YuanWenqing/opensearch4j'
                 licenses {
                     license {
