@@ -5,9 +5,10 @@ package top.fangwz.aliyun.opensearch.query;
 
 /**
  * 搜索子句
- *
+ * <p>
+ * https://help.aliyun.com/document_detail/29140.html
+ * <p>
  * author yuanwq
- * @see {@literal https://help.aliyun.com/document_detail/29140.html}
  */
 public interface ISearchClause extends IQueryComponent {
 

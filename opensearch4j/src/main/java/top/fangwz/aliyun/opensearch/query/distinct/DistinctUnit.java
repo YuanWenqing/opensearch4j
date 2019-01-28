@@ -56,7 +56,7 @@ public class DistinctUnit implements IQueryComponent {
   }
 
   /**
-   * reserved=false && updateTotalHit=true： 搜索结果的total会被减去distinct丢弃的文档个数
+   * {@code reserved=false && updateTotalHit=true}： 搜索结果的total会被减去distinct丢弃的文档个数
    */
   public DistinctUnit setUpdateTotalHit(boolean updateTotalHit) {
     this.updateTotalHit = updateTotalHit;
