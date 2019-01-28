@@ -9,3 +9,21 @@
 * disable和summary功能未实现
 * 仅支持search和suggest功能
 
+## Usage
+
+maven
+
+~~~xml
+<dependency>
+  <groupId>xyz.codemeans.aliyun4j</groupId>
+  <artifactId>opensearch4j</artifactId>
+  <version>1.0.0</version>
+</dependency>
+~~~
+
+gradle
+
+~~~groovy
+implementation "xyz.codemeans.aliyun4j:opensearch4j:1.0.0"
+~~~
+
