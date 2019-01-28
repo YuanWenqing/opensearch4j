@@ -5,8 +5,8 @@ package top.fangwz.aliyun.opensearch.query;
  * <p>
  * https://help.aliyun.com/document_detail/57155.html
  *
- * @author: yuanwq
- * @date: 2018/9/18
+ * author: yuanwq
+ * date: 2018/9/18
  */
 public interface IQueryComponent {
 

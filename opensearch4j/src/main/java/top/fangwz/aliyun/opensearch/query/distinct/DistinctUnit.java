@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月13日
+ * author yuanwq, date: 2017年9月13日
  */
 package top.fangwz.aliyun.opensearch.query.distinct;
 
@@ -11,7 +11,7 @@ import top.fangwz.aliyun.opensearch.query.filter.IFilterCond;
 import static com.google.common.base.Preconditions.*;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Getter
 public class DistinctUnit implements IQueryComponent {

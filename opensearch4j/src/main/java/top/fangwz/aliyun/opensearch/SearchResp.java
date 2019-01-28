@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月12日
+ * author yuanwq, date: 2017年9月12日
  */
 package top.fangwz.aliyun.opensearch;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Data
 public class SearchResp<T> {

@@ -1,8 +1,8 @@
 package top.fangwz.aliyun.opensearch.query.query;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/21
+ * author: yuanwq
+ * date: 2018/9/21
  */
 abstract class AbstractQueryCond implements IQueryCond {
   @Override

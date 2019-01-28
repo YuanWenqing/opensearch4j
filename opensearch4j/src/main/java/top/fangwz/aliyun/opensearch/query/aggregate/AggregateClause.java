@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月13日
+ * author yuanwq, date: 2017年9月13日
  */
 package top.fangwz.aliyun.opensearch.query.aggregate;
 
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 public class AggregateClause implements ISearchClause {
   private final Map<String, AggregateUnit> aggregates = Maps.newLinkedHashMap();

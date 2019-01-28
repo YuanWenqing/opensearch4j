@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月12日
+ * author yuanwq, date: 2017年9月12日
  */
 package top.fangwz.aliyun.opensearch.query.filter;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 import top.fangwz.aliyun.opensearch.query.ISearchClause;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Getter
 public class FilterClause implements ISearchClause {

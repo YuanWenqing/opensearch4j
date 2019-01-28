@@ -1,8 +1,8 @@
 package top.fangwz.aliyun.opensearch.query.filter;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/21
+ * author: yuanwq
+ * date: 2018/9/21
  */
 abstract class AbstractFilterCond implements IFilterCond {
 

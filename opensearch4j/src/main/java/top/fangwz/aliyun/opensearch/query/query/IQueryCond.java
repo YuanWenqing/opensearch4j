@@ -3,8 +3,8 @@ package top.fangwz.aliyun.opensearch.query.query;
 import top.fangwz.aliyun.opensearch.query.IQueryComponent;
 
 /**
- * @author: yuanwq
- * @date: 2018/4/19
+ * author: yuanwq
+ * date: 2018/4/19
  */
 public interface IQueryCond extends IQueryComponent {
 
@@ -22,8 +22,8 @@ public interface IQueryCond extends IQueryComponent {
   IQueryCond rank(IQueryCond right);
 
   /**
-   * @author: yuanwq
-   * @date: 2018/9/21
+   * author: yuanwq
+   * date: 2018/9/21
    */
   enum LogicalOp {
     AND,

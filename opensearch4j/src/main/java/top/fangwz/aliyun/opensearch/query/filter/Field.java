@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import static com.google.common.base.Preconditions.*;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/20
+ * author: yuanwq
+ * date: 2018/9/20
  */
 @Data
 public class Field implements IExpression {

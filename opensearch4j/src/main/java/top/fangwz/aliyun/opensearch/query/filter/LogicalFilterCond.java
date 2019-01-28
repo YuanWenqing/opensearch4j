@@ -3,8 +3,8 @@ package top.fangwz.aliyun.opensearch.query.filter;
 import lombok.Data;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/21
+ * author: yuanwq
+ * date: 2018/9/21
  */
 @Data
 public class LogicalFilterCond extends AbstractFilterCond {

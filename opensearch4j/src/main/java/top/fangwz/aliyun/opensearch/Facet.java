@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月15日
+ * author yuanwq, date: 2017年9月15日
  */
 package top.fangwz.aliyun.opensearch;
 
@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Data
 public class Facet {

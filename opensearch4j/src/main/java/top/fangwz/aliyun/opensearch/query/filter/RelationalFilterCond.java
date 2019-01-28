@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/20
+ * author: yuanwq
+ * date: 2018/9/20
  */
 @Data
 public class RelationalFilterCond extends AbstractFilterCond {

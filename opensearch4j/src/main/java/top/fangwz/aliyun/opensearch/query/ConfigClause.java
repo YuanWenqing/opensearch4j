@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月12日
+ * author yuanwq, date: 2017年9月12日
  */
 package top.fangwz.aliyun.opensearch.query;
 
@@ -11,7 +11,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * 配置子句：https://help.aliyun.com/document_detail/29156.html
  *
- * @author yuanwq
+ * author yuanwq
  */
 @Getter
 public class ConfigClause implements ISearchClause {

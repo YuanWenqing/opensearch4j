@@ -9,8 +9,8 @@ import top.fangwz.aliyun.opensearch.query.query.QueryClause;
 /**
  * 搜索参数的抽象类：https://help.aliyun.com/document_detail/57155.html
  *
- * @author: yuanwq
- * @date: 2018/9/22
+ * author: yuanwq
+ * date: 2018/9/22
  */
 @Data
 public class Query implements IQueryComponent {

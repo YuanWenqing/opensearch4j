@@ -6,8 +6,8 @@ import java.util.Iterator;
 import static com.google.common.base.Preconditions.*;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/21
+ * author: yuanwq
+ * date: 2018/9/21
  */
 public interface Filters {
   interface Values {

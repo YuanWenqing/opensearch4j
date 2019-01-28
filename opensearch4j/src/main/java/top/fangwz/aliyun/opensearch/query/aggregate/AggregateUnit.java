@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月13日
+ * author yuanwq, date: 2017年9月13日
  */
 package top.fangwz.aliyun.opensearch.query.aggregate;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.*;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Getter
 public class AggregateUnit implements IQueryComponent {

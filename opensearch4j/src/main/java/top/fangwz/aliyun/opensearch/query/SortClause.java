@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月12日
+ * author yuanwq, date: 2017年9月12日
  */
 package top.fangwz.aliyun.opensearch.query;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 public class SortClause implements ISearchClause {
   public static final String DEFAULT_SORT = "RANK";

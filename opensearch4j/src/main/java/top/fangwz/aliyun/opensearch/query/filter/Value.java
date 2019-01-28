@@ -3,8 +3,8 @@ package top.fangwz.aliyun.opensearch.query.filter;
 import lombok.Data;
 
 /**
- * @author: yuanwq
- * @date: 2018/9/20
+ * author: yuanwq
+ * date: 2018/9/20
  */
 @Data
 public class Value implements IExpression {

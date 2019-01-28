@@ -1,5 +1,5 @@
 /**
- * @author yuanwq, date: 2017年9月12日
+ * author yuanwq, date: 2017年9月12日
  */
 package top.fangwz.aliyun.opensearch.query.query;
 
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.text.translate.LookupTranslator;
 import static com.google.common.base.Preconditions.*;
 
 /**
- * @author yuanwq
+ * author yuanwq
  */
 @Getter
 @ToString
